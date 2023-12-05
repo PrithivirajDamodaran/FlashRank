@@ -23,7 +23,9 @@ Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search 
 
 ## Where can you use it?
   - Lexical Search (RegularDBs that supported full-text search or Inverted Index)
+  <center><img src="./images/lexical_search.png" width=600/></center>
   - Semantic Search (VectorDBs)
+  <center><img src="./images/vector_search_rag.jpeg" width=600/></center>
   - Hybrid Search
 
 
