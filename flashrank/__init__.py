@@ -1,0 +1,1 @@
+from flashrank import Ranker
