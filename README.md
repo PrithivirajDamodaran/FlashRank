@@ -3,15 +3,15 @@ Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search 
 
 #### Ultra-lite:
 - No torch or transformers dependency
-- Smallest model is ~17MB
-- Largest model is  ~130MB
+- **Smallest model** is **~17MB**
+- **Largest model** is  **~130MB**
 - Total package is < 200MB
 - Best for serverless deployemnts like AWS Lambda.
     
 #### Super-fast:
 - Runs on CPU
-- Rerank speed is a function of # of tokens in passages + query
-- Time taken for the example below just to give an idea.
+- Rerank speed is a function of # of tokens in passages, query + model depth (layers)
+- To give an idea, Time taken by the example in code using the default model is below.
 <center><img src="./images/time.png" width=600/></center>
 - Detailed benchmarking TBD
 
@@ -19,7 +19,7 @@ Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search 
 - Below are the list of models supported as now.
     * ms-marco-TinyBERT-L-2-v2 (default)
     * ms-marco-MiniLM-L-12-v2
-- Why only sleeker models? Reranking is the final leg of larger retrieval pipelines. So it has to be sleek enough to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that offer great performance are chosen. Feel free to raise PRs for new models as you see fit.
+- Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer great performance are chosen. Feel free to raise PRs for new models as you see fit.
 
 ## Where can you use it?
   - Lexical Search (RegularDBs that supported full-text search or Inverted Index)
@@ -37,6 +37,12 @@ pip install flashrank
 from flashrank.Ranker import Ranker
 ranker = Ranker()
 
+or 
+
+ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
+```
+
+```python
 query = "Tricks to accelerate LLM inference"
 passages = [
     "Introduce *lookahead decoding*: - a parallel decoding algo to accelerate LLM inference - w/o the need for a draft model or a data store - linearly decreases # decoding steps relative to log(FLOPs) used per decoding step.",
