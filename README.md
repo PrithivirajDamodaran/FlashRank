@@ -9,9 +9,10 @@ Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search 
 - Best for serverless deployemnts like AWS Lambda.
     
 ### Super-fast:
-- ![time taken](./images/time.png)
 - Runs on CPU
 - Rerank speed is a function of # of tokens in passages + query
+- Time taken for the example below just to give an idea.
+    ![time taken](./images/time.png =x200)
 - Detailed benchmarking TBD
 
 ### SoTA Cross-encoders:
