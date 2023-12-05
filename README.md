@@ -2,16 +2,15 @@
 Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search &amp; retrieval pipelines.
 
 #### Ultra-lite:
-- No torch or transformers dependency
-- **Smallest model** is **~17MB**
-- **Largest model** is  **~130MB**
-- Total package is < 200MB
+- No Torch or Transformers dependency. Runs on CPU.
+- **Smallest model** is **~17MB**.
+- **Largest model** is  **~130MB**.
+- Total package is < 200MB.
 - Best for serverless deployemnts like AWS Lambda.
     
 #### Super-fast:
-- Runs on CPU
 - Rerank speed is a function of # of tokens in passages, query + model depth (layers)
-- To give an idea, Time taken by the example in code using the default model is below.
+- To give an idea, Time taken by the example (in code) using the default model is below.
 <center><img src="./images/time.png" width=600/></center>
 - Detailed benchmarking TBD
 
@@ -21,12 +20,13 @@ Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search 
     * ms-marco-MiniLM-L-12-v2
 - Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer great performance are chosen. Feel free to raise PRs for new models as you see fit.
 
-## Where can you use it?
-  - Lexical Search (RegularDBs that supported full-text search or Inverted Index)
+## Where you can use this add-on?
+1. **Lexical Search (RegularDBs that supported full-text search or Inverted Index)**
   <center><img src="./images/lexical_search.png" width=600/></center>
-  - Semantic Search (VectorDBs)
-  <center><img src="./images/vector_search_rag.jpeg" width=600/></center>
-  - Hybrid Search
+2. **Semantic Search / RAG usecases (VectorDBs)**
+  <center><img src="./images/vector_search_rag.png" width=600/></center>
+3. **Hybrid Search**
+  TBD
 
 
 ## Installation:
