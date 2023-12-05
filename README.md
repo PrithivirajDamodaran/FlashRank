@@ -1,21 +1,21 @@
 # FlashRank
 Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search &amp; retrieval pipelines.
 
-### Ultra-lite:
+#### Ultra-lite:
 - No torch or transformers dependency
 - Smallest model is ~17MB
 - Largest model is  ~130MB
 - Total package is < 200MB
 - Best for serverless deployemnts like AWS Lambda.
     
-### Super-fast:
+#### Super-fast:
 - Runs on CPU
 - Rerank speed is a function of # of tokens in passages + query
 - Time taken for the example below just to give an idea.
 <center><img src="./images/time.png" width=600/></center>
 - Detailed benchmarking TBD
 
-### SoTA Cross-encoders:
+#### SoTA Cross-encoders:
 - Below are the list of models supported as now.
     * ms-marco-TinyBERT-L-2-v2 (default)
     * ms-marco-MiniLM-L-12-v2
