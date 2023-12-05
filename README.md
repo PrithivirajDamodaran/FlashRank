@@ -12,7 +12,7 @@ Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search 
 - Runs on CPU
 - Rerank speed is a function of # of tokens in passages + query
 - Time taken for the example below just to give an idea.
-<img src="./images/time.png" width="200" />
+<center><img src="./images/time.png"/></center>
 - Detailed benchmarking TBD
 
 ### SoTA Cross-encoders:
