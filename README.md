@@ -23,10 +23,12 @@ Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search 
 ## Where you can use this add-on?
 1. **Lexical Search (RegularDBs that supported full-text search or Inverted Index)**
   <center><img src="./images/lexical_search.png" width=600/></center>
+
 2. **Semantic Search / RAG usecases (VectorDBs)**
   <center><img src="./images/vector_search_rag.png" width=600/></center>
+
 3. **Hybrid Search**
-  TBD
+  - TBD
 
 
 ## Installation:
