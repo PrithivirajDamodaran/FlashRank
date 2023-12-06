@@ -21,17 +21,6 @@ Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search 
     * ms-marco-MiniLM-L-12-v2
 - Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise PRs for new models as you see fit.
 
-## Few possible usecases:
-1. **Lexical Search (RegularDBs that supported full-text search or Inverted Index)**
-  <center><img src="./images/lexical_search.png" width=600/></center>
-
-2. **Semantic Search / RAG usecases (VectorDBs)**
-  <center><img src="./images/vector_search_rag.png" width=600/></center>
-
-3. **Hybrid Search**
-  - TBD
-
-
 ## Installation:
 ```python 
 pip install flashrank
@@ -70,5 +59,16 @@ print(results)
 {'score': -2.2156813, 'passage': 'Ever want to make your LLM inference go brrrrr but got stuck at implementing speculative decoding and finding the suitable draft model? No more pain! Thrilled to unveil Medusa, a simple framework that removes the annoying draft model while getting 2x speedup. '}]
 ```
 
+## You can use it with any search & retrieval pipeline:
+1. **Lexical Search (RegularDBs that supported full-text search or Inverted Index)**
+  <center><img src="./images/lexical_search.png" width=600/></center>
+
+2. **Semantic Search / RAG usecases (VectorDBs)**
+  <center><img src="./images/vector_search_rag.png" width=600/></center>
+
+3. **Hybrid Search**
+  - TBD
+
 ## Deployment patterns
-TBD
+#### Use it in a AWS Lambda function
+- TBD
