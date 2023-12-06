@@ -72,8 +72,8 @@ print(results)
 <br/>
 
 3. **Hybrid Search**
-  <center><img src="./images/hybrid_search.png" width=600/></center>
-  
+  <center><img src="./images/hybrid_search.png" width=400/></center>
+
 <br/>
 
 ## Deployment patterns
