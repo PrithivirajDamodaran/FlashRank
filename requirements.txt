@@ -1,5 +1,0 @@
-tokenizers
-onnxruntime
-numpy
-requests
-tqdm
