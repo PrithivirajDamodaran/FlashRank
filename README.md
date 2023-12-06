@@ -1,27 +1,28 @@
 # FlashRank
-Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search &amp; retrieval pipelines.
+Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA cross-encoders.
 
-#### Ultra-lite: 
-- **No Torch or Transformers** needed. Runs on CPU.
-- **Smallest model** is **~17MB**.
+1. ⚡ Ultra-lite: 
+    - **No Torch or Transformers** needed. Runs on CPU.
+    - **Smallest model** is **~17MB**.
     
-#### Super-fast:
-- Rerank speed is a function of # of tokens in passages, query + model depth (layers)
-- To give an idea, Time taken by the example (in code) using the default model is below.
-- <center><img src="./images/time.png" width=600/></center>
-- Detailed benchmarking, TBD
+2. ⏱️ Super-fast:
+    - Rerank speed is a function of # of tokens in passages, query + model depth (layers)
+    - To give an idea, Time taken by the example (in code) using the default model is below.
+    - <center><img src="./images/time.png" width=600/></center>
+    - Detailed benchmarking, TBD
 
-#### Reranker thats $ concious:
-- **Lowest $ per invocation:** Serverless deployments like Lambda are charged by memory & time per invocation*
-- **Smaller package size** = lesser cold starts, quicker re-deployments.
+3. 💸 Reranker thats $ concious:
+    - **Lowest $ per invocation:** Serverless deployments like Lambda are charged by memory & time per invocation*
+    - **Smaller package size** = lesser cold starts, quicker re-deployments.
 
-#### SoTA Cross-encoders:
-- Below are the list of models supported as now.
-    * ms-marco-TinyBERT-L-2-v2 (default)
-    * ms-marco-MiniLM-L-12-v2
-- Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise PRs for new models as you see fit.
+4. 🎯 SoTA Cross-encoders:
+    - Below are the list of models supported as now.
+        * ms-marco-TinyBERT-L-2-v2 (default)
+        * ms-marco-MiniLM-L-12-v2
+    - Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
 
-## Installation:
+
+## 🚀 Installation:
 ```python 
 pip install flashrank
 ```
