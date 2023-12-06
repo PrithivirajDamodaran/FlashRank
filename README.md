@@ -6,7 +6,7 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
     - **Models as small** as **~17MB**.
     
 2. ⏱️ **Super-fast**:
-    - Rerank speed is a function of # of tokens in passages, query + model depth (layers)
+    - Rerank speed is a function of **# of tokens in passages, query + model depth (layers)**
     - To give an idea, Time taken by the example (in code) using the default model is below.
     - <center><img src="./images/time.png" width=600/></center>
     - Detailed benchmarking, TBD
