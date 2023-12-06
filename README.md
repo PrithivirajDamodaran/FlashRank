@@ -1,26 +1,27 @@
 # FlashRank
 Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search &amp; retrieval pipelines.
 
-#### Ultra-lite:
+#### Ultra-lite: 
 - No Torch or Transformers dependency. Runs on CPU.
 - **Smallest model** is **~17MB**.
-- **Largest model** is  **~130MB**.
-- Total package is < 200MB.
-- Best for serverless deployemnts like AWS Lambda.
     
 #### Super-fast:
 - Rerank speed is a function of # of tokens in passages, query + model depth (layers)
 - To give an idea, Time taken by the example (in code) using the default model is below.
 <center><img src="./images/time.png" width=600/></center>
-- Detailed benchmarking TBD
+- Detailed benchmarking, TBD
+
+#### Reranker thats $ concious:
+- Lowest $ per invocation: Serverless deployments like Lambda are charged by memory & time per invocation*
+Smaller package size = lesser cold starts, quicker re-deployments.
 
 #### SoTA Cross-encoders:
 - Below are the list of models supported as now.
     * ms-marco-TinyBERT-L-2-v2 (default)
     * ms-marco-MiniLM-L-12-v2
-- Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer great performance are chosen. Feel free to raise PRs for new models as you see fit.
+- Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise PRs for new models as you see fit.
 
-## Where you can use this add-on?
+## Few possible usecases:
 1. **Lexical Search (RegularDBs that supported full-text search or Inverted Index)**
   <center><img src="./images/lexical_search.png" width=600/></center>
 
