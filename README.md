@@ -61,14 +61,20 @@ print(results)
 ```
 
 ## You can use it with any search & retrieval pipeline:
+
 1. **Lexical Search (RegularDBs that supported full-text search or Inverted Index)**
   <center><img src="./images/lexical_search.png" width=600/></center>
 
+<br/>
+
 2. **Semantic Search / RAG usecases (VectorDBs)**
   <center><img src="./images/vector_search_rag.png" width=600/></center>
+<br/>
 
 3. **Hybrid Search**
-  - TBD
+  <center><img src="./images/hybrid_search.png" width=600/></center>
+  
+<br/>
 
 ## Deployment patterns
 #### How to use it in a AWS Lambda function ?
