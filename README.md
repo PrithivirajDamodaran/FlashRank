@@ -3,7 +3,7 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
 
 1. ⚡ **Ultra-lite**: 
     - **No Torch or Transformers** needed. Runs on CPU.
-    - **Smallest model** is **~17MB**.
+    - **Models as small** as **~17MB**.
     
 2. ⏱️ **Super-fast**:
     - Rerank speed is a function of # of tokens in passages, query + model depth (layers)
