@@ -1,21 +1,21 @@
-# FlashRank
+# 🏎️ FlashRank
 Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA cross-encoders.
 
-1. ⚡ Ultra-lite: 
+1. ⚡ **Ultra-lite**: 
     - **No Torch or Transformers** needed. Runs on CPU.
     - **Smallest model** is **~17MB**.
     
-2. ⏱️ Super-fast:
+2. ⏱️ **Super-fast**:
     - Rerank speed is a function of # of tokens in passages, query + model depth (layers)
     - To give an idea, Time taken by the example (in code) using the default model is below.
     - <center><img src="./images/time.png" width=600/></center>
     - Detailed benchmarking, TBD
 
-3. 💸 Reranker thats $ concious:
+3. 💸 **$ concious**:
     - **Lowest $ per invocation:** Serverless deployments like Lambda are charged by memory & time per invocation*
     - **Smaller package size** = lesser cold starts, quicker re-deployments.
 
-4. 🎯 SoTA Cross-encoders:
+4. 🎯 **Based on SoTA Cross-encoders**:
     - Below are the list of models supported as now.
         * ms-marco-TinyBERT-L-2-v2 (default)
         * ms-marco-MiniLM-L-12-v2
