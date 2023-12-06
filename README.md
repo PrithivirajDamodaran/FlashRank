@@ -70,5 +70,5 @@ print(results)
   - TBD
 
 ## Deployment patterns
-#### Use it in a AWS Lambda function
+#### How to use it in a AWS Lambda function ?
 - TBD
