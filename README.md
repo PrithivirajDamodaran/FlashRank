@@ -2,18 +2,18 @@
 Ultra-lite &amp; Super-fast SoTA cross-encoder based re-ranking for your search &amp; retrieval pipelines.
 
 #### Ultra-lite: 
-- No Torch or Transformers dependency. Runs on CPU.
+- **No Torch or Transformers** needed. Runs on CPU.
 - **Smallest model** is **~17MB**.
     
 #### Super-fast:
 - Rerank speed is a function of # of tokens in passages, query + model depth (layers)
 - To give an idea, Time taken by the example (in code) using the default model is below.
-<center><img src="./images/time.png" width=600/></center>
+- <center><img src="./images/time.png" width=600/></center>
 - Detailed benchmarking, TBD
 
 #### Reranker thats $ concious:
-- Lowest $ per invocation: Serverless deployments like Lambda are charged by memory & time per invocation*
-Smaller package size = lesser cold starts, quicker re-deployments.
+- **Lowest $ per invocation:** Serverless deployments like Lambda are charged by memory & time per invocation*
+- **Smaller package size** = lesser cold starts, quicker re-deployments.
 
 #### SoTA Cross-encoders:
 - Below are the list of models supported as now.
