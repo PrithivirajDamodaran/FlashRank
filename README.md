@@ -16,7 +16,7 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
     - **Smaller package size** = shorter cold start times, quicker re-deployments for Serverless.
 
 4. 🎯 **Based on SoTA Cross-encoders**:
-    - Below are the list of models supported as now.
+    - Below are the list of models supported as of now.
         * ms-marco-TinyBERT-L-2-v2 (default)
         * ms-marco-MiniLM-L-12-v2
         * ms-marco-MultiBERT-L-12  (Multi-lingual, [supports 100+ languages](https://github.com/google-research/bert/blob/master/multilingual.md#list-of-languages))
