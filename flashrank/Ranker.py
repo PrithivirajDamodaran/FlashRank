@@ -114,7 +114,8 @@ class Ranker:
 
         outputs = self.session.run(None, input_data)
 
-        scores = list(outputs[0].flatten())
+        scores = outputs[0].flatten()
+        scores = list(1 / (1 + np.exp(-scores)))
         combined_passages = [(score, passage) for score, passage in zip(scores, passages)]
         combined_passages.sort(key=lambda x: x[0], reverse=True)
 
@@ -125,5 +126,6 @@ class Ranker:
                 "passage": passage
             })
 
-
+        
         return passage_info
+    
