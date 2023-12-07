@@ -3,7 +3,7 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
 
 1. ⚡ **Ultra-lite**: 
     - **No Torch or Transformers** needed. Runs on CPU.
-    - **Models as small** as **~17MB**.
+    - **Boasts the tiniest reranker in the world **~4MB**.
     
 2. ⏱️ **Super-fast**:
     - Rerank speed is a function of **# of tokens in passages, query + model depth (layers)**
@@ -32,12 +32,12 @@ pip install flashrank
 ## Usage:
 ```python
 from flashrank.Ranker import Ranker
-# Default Compact (~17MB), blazing fast model and competitive performance.
+# Nano (~4MB), blazing fast model & competitive performance.
 ranker = Ranker()
 
 or 
 
-# Small (~34MB), slightly slower but better performance.
+# Small (~34MB), slightly slower &  better performance.
 ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
 
 or 
