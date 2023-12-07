@@ -30,11 +30,11 @@ pip install flashrank
 ## Usage:
 ```python
 from flashrank.Ranker import Ranker
-# for short to medium passages, default blazing fast model and competitive performance.
+# Default blazing fast model and competitive performance.
 ranker = Ranker()
 
 or 
-# for medium to long passages (slower model) with slightly better performance.
+# For a larger (slower model) with slightly better performance.
 ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
 ```
 
