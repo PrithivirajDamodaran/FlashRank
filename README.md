@@ -20,7 +20,7 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
         * ms-marco-TinyBERT-L-2-v2 (default)
         * ms-marco-MiniLM-L-12-v2
         * ms-marco-MultiBERT-L-12  (Multi-lingual, [supports 100+ languages](https://github.com/google-research/bert/blob/master/multilingual.md#list-of-languages))
-        
+
     - Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
 
 
@@ -36,8 +36,11 @@ from flashrank.Ranker import Ranker
 ranker = Ranker()
 
 or 
+
 # Small (~34MB), slightly slower but better performance.
 ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
+
+or 
 
 # Medium (~150MB), slower model with best performance for 100+ languages including en.
 ranker = Ranker(model_name="ms-marco-MultiBERT-L-12", cache_dir="/opt")
