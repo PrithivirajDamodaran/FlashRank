@@ -13,13 +13,14 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
 
 3. 💸 **$ concious**:
     - **Lowest $ per invocation:** Serverless deployments like Lambda are charged by memory & time per invocation*
-    - **Smaller package size** = lesser cold starts, quicker re-deployments.
+    - **Smaller package size** = shorter cold start times, quicker re-deployments for Serverless.
 
 4. 🎯 **Based on SoTA Cross-encoders**:
     - Below are the list of models supported as now.
         * ms-marco-TinyBERT-L-2-v2 (default)
         * ms-marco-MiniLM-L-12-v2
-        * ms-marco-MultiBERT-L-12  
+        * ms-marco-MultiBERT-L-12  (Multi-lingual, [supports 100+ languages](https://github.com/google-research/bert/blob/master/multilingual.md#list-of-languages))
+        
     - Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
 
 
@@ -31,12 +32,15 @@ pip install flashrank
 ## Usage:
 ```python
 from flashrank.Ranker import Ranker
-# Default blazing fast model and competitive performance.
+# Default Compact (~17MB), blazing fast model and competitive performance.
 ranker = Ranker()
 
 or 
-# For a larger (slower model) with slightly better performance.
+# Small (~34MB), slightly slower but better performance.
 ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
+
+# Medium (~150MB), slower model with best performance for 100+ languages including en.
+ranker = Ranker(model_name="ms-marco-MultiBERT-L-12", cache_dir="/opt")
 ```
 
 ```python
