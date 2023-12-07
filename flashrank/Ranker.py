@@ -114,7 +114,11 @@ class Ranker:
 
         outputs = self.session.run(None, input_data)
 
-        scores = outputs[0].flatten()
+        if outputs[0].shape[1] > 1:
+            scores = outputs[0][:, 1]
+        else:
+            scores = outputs[0].flatten()
+        
         scores = list(1 / (1 + np.exp(-scores)))
         combined_passages = [(score, passage) for score, passage in zip(scores, passages)]
         combined_passages.sort(key=lambda x: x[0], reverse=True)
