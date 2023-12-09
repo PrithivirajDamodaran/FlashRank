@@ -1,1 +1,1 @@
-from flashrank import Ranker
+from .main import Ranker

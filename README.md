@@ -31,19 +31,19 @@ pip install flashrank
 
 ## Usage:
 ```python
-from flashrank.Ranker import Ranker
+from flashrank import Ranker
 # Nano (~4MB), blazing fast model & competitive performance (ranking precision).
 ranker = Ranker()
 
 or 
 
 # Small (~34MB), slightly slower & best performance (ranking precision).
-ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
+ranker = Ranker(model_id="ms-marco-MiniLM-L-12-v2")
 
 or 
 
 # Medium (~150MB), slower model with best performance (ranking precision) for 100+ languages including en.
-ranker = Ranker(model_name="ms-marco-MultiBERT-L-12", cache_dir="/opt")
+ranker = Ranker(model_id="ms-marco-MultiBERT-L-12")
 ```
 
 ```python
