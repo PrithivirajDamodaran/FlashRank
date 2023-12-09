@@ -112,4 +112,3 @@ class Ranker:
         combined_passages = sorted(zip(scores, passages), key=lambda x: x[0], reverse=True)
 
         return [{'score': s, "passage": p} for s, p in combined_passages]
-
