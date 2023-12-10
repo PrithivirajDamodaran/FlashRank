@@ -86,4 +86,9 @@ print(results)
 
 ## Deployment patterns
 #### How to use it in a AWS Lambda function ?
-- TBD
+In AWS or other serverless environments the entire VM is read-only you might have to create your 
+own custom dir and use it for loading the models (and eventually as a cache between warm calls). You can do it during init with cache_dir parameter.
+
+```python
+ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
+```
