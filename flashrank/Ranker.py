@@ -8,6 +8,7 @@ import zipfile
 import requests
 from tqdm import tqdm
 from flashrank.Config import default_model, default_cache_dir, model_url, model_file_map
+import collections
 
 class Ranker:
 
@@ -60,6 +61,17 @@ class Ranker:
         # Optionally, remove the zip file after extraction
         os.remove(local_zip_file)
 
+    def _load_vocab(self, vocab_file):
+    
+        vocab = collections.OrderedDict()
+        with open(vocab_file, "r", encoding="utf-8") as reader:
+            tokens = reader.readlines()
+        for index, token in enumerate(tokens):
+            token = token.rstrip("\n")
+            vocab[token] = index
+        return vocab
+        
+
     def _get_tokenizer(self, max_length = 512):
       
       config_path = self.model_dir / "config.json"
@@ -92,7 +104,13 @@ class Ranker:
           elif isinstance(token, dict):
               tokenizer.add_special_tokens([AddedToken(**token)])
 
+      vocab_file = self.model_dir / "vocab.txt"
+      if vocab_file.exists():
+          tokenizer.vocab = self._load_vocab(vocab_file)
+          tokenizer.ids_to_tokens = collections.OrderedDict([(ids, tok) for tok, ids in tokenizer.vocab.items()])                
+
       return tokenizer
+    
     
 
     def rerank(self, query, passages):
