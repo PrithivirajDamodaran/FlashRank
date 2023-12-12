@@ -112,7 +112,6 @@ class Ranker:
       return tokenizer
     
     
-
     def rerank(self, query, passages):
 
         query_passage_pairs = [[query, passage] for passage in passages]
@@ -120,13 +119,21 @@ class Ranker:
         input_ids = np.array([e.ids for e in input_text])
         token_type_ids = np.array([e.type_ids for e in input_text])
         attention_mask = np.array([e.attention_mask for e in input_text])
+        
+        use_token_type_ids = token_type_ids is not None and not np.all(token_type_ids == 0)
 
+        if use_token_type_ids:
+            onnx_input = {
+                "input_ids": np.array(input_ids, dtype=np.int64),
+                "attention_mask": np.array(attention_mask, dtype=np.int64),
+                "token_type_ids": np.array(token_type_ids, dtype=np.int64),
+            }
+        else:
+            onnx_input = {
+                "input_ids": np.array(input_ids, dtype=np.int64),
+                "attention_mask": np.array(attention_mask, dtype=np.int64)
+            }
 
-        onnx_input = {
-            "input_ids": np.array(input_ids, dtype=np.int64),
-            "attention_mask": np.array(attention_mask, dtype=np.int64),
-            "token_type_ids": np.array(token_type_ids, dtype=np.int64),
-        }
 
         input_data = {k: v for k, v in onnx_input.items()}
 
@@ -150,4 +157,3 @@ class Ranker:
 
         
         return passage_info
-    

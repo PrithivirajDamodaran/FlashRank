@@ -19,6 +19,7 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
     - Below are the list of models supported as of now.
         * ms-marco-TinyBERT-L-2-v2 (default)
         * ms-marco-MiniLM-L-12-v2
+        * rank-T5-flan (Best non cross-encoder reranker)
         * ms-marco-MultiBERT-L-12  (Multi-lingual, [supports 100+ languages](https://github.com/google-research/bert/blob/master/multilingual.md#list-of-languages))
 
     - Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
@@ -42,7 +43,12 @@ ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
 
 or 
 
-# Medium (~150MB), slower model with best performance (ranking precision) for 100+ languages including en.
+# Medium (~110MB), slower model with best zeroshot performance (ranking precision) on out of domain data.
+ranker = Ranker(model_name="rank-T5-flan", cache_dir="/opt")
+
+or 
+
+# Medium (~150MB), slower model with competitive performance (ranking precision) for 100+ languages  (don't use for english)
 ranker = Ranker(model_name="ms-marco-MultiBERT-L-12", cache_dir="/opt")
 ```
 
@@ -87,7 +93,7 @@ print(results)
 ## Deployment patterns
 #### How to use it in a AWS Lambda function ?
 In AWS or other serverless environments the entire VM is read-only you might have to create your 
-own custom dir and use it for loading the models (and eventually as a cache between warm calls). You can do it during init with cache_dir parameter.
+own custom dir. You can do so in your Dockerfile and use it for loading the models (and eventually as a cache between warm calls). You can do it during init with cache_dir parameter. 
 
 ```python
 ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
