@@ -114,7 +114,10 @@ class Ranker:
     
     def rerank(self, query, passages):
 
-        query_passage_pairs = [[query, passage] for passage in passages]
+        passage_texts = [passage["text"] for passage in passages]
+        passage_ids   = [passage["id"] for passage in passages]
+        query_passage_pairs = [[query, passage_text] for passage_text in passage_texts]
+        
         input_text = self.tokenizer.encode_batch(query_passage_pairs)
         input_ids = np.array([e.ids for e in input_text])
         token_type_ids = np.array([e.type_ids for e in input_text])
@@ -145,15 +148,17 @@ class Ranker:
             scores = outputs[0].flatten()
         
         scores = list(1 / (1 + np.exp(-scores)))
-        combined_passages = [(score, passage) for score, passage in zip(scores, passages)]
-        combined_passages.sort(key=lambda x: x[0], reverse=True)
+        combined_passages = [(passage_id, score, passage) for passage_id, score, passage in zip(passage_ids, scores, passage_texts)]
+        combined_passages.sort(key=lambda x: x[1], reverse=True)
 
         passage_info = []
-        for score, passage in combined_passages:
+        for passage_id, score, passage in combined_passages:
             passage_info.append({
+                "id": passage_id,
                 "score": score,
                 "passage": passage
             })
 
         
         return passage_info
+    
