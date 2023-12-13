@@ -168,6 +168,6 @@ ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
 
 <br/>
 
-2. 1. **In-domain and Zeroshot performance of RankT5 fine-tuned on MS-MARCO**
+2. **In-domain and Zeroshot performance of RankT5 fine-tuned on MS-MARCO**
   <center><img src="./images/RankT5_BEIR.png" width=450/></center>
 <br/>
