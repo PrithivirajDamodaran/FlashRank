@@ -54,6 +54,7 @@ ranker = Ranker(model_name="ms-marco-MultiBERT-L-12", cache_dir="/opt")
 ```
 
 ```python
+# Metadata is optional, Id can be your DB ids from your retrieval stage or simple numeric indices.
 query = "How to speedup LLMs?"
 passages = [
    {
@@ -168,5 +169,5 @@ ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
 <br/>
 
 2. 1. **In-domain and Zeroshot performance of RankT5 fine-tuned on MS-MARCO**
-  <center><img src="./images/RankT5_BEIR.png" width=600/></center>
+  <center><img src="./images/RankT5_BEIR.png" width=450/></center>
 <br/>
