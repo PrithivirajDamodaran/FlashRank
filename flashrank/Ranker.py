@@ -7,8 +7,7 @@ import os
 import zipfile
 import requests
 from tqdm import tqdm
-# from flashrank.Config import default_model, default_cache_dir, model_url, model_file_map
-from Config import default_model, default_cache_dir, model_url, model_file_map
+from flashrank.Config import default_model, default_cache_dir, model_url, model_file_map
 import collections
 
 class RerankRequest:
