@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='FlashRank', 
-    version='0.1.62', 
+    version='0.1.63', 
     packages=find_packages(),
     install_requires=[
         'tokenizers',
