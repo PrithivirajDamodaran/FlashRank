@@ -7,8 +7,15 @@ import os
 import zipfile
 import requests
 from tqdm import tqdm
-from flashrank.Config import default_model, default_cache_dir, model_url, model_file_map
+# from flashrank.Config import default_model, default_cache_dir, model_url, model_file_map
+from Config import default_model, default_cache_dir, model_url, model_file_map
 import collections
+
+class RerankRequest:
+
+    def __init__(self, query=None, passages=None):
+        self.query = query
+        self.passages = passages if passages is not None else []
 
 class Ranker:
 
@@ -112,12 +119,12 @@ class Ranker:
       return tokenizer
     
     
-    def rerank(self, query, passages):
+    def rerank(self, request):
+        query = request.query
+        passages = request.passages
 
-        passage_texts = [passage["text"] for passage in passages]
-        passage_ids   = [passage["id"] for passage in passages]
-        query_passage_pairs = [[query, passage_text] for passage_text in passage_texts]
-        
+        query_passage_pairs = [[query, passage["text"]] for passage in passages]
+
         input_text = self.tokenizer.encode_batch(query_passage_pairs)
         input_ids = np.array([e.ids for e in input_text])
         token_type_ids = np.array([e.type_ids for e in input_text])
@@ -146,19 +153,16 @@ class Ranker:
             scores = outputs[0][:, 1]
         else:
             scores = outputs[0].flatten()
-        
-        scores = list(1 / (1 + np.exp(-scores)))
-        combined_passages = [(passage_id, score, passage) for passage_id, score, passage in zip(passage_ids, scores, passage_texts)]
-        combined_passages.sort(key=lambda x: x[1], reverse=True)
 
-        passage_info = []
-        for passage_id, score, passage in combined_passages:
-            passage_info.append({
-                "id": passage_id,
-                "score": score,
-                "passage": passage
-            })
+        scores = list(1 / (1 + np.exp(-scores)))  
 
-        
-        return passage_info
+        # Combine scores with passages, including metadata
+        for score, passage in zip(scores, passages):
+            passage["score"] = score
+
+        # Sort passages based on scores
+        passages.sort(key=lambda x: x["score"], reverse=True)
+
+        return passages
     
+

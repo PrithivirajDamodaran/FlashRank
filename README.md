@@ -15,7 +15,8 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
     - **Lowest $ per invocation:** Serverless deployments like Lambda are charged by memory & time per invocation*
     - **Smaller package size** = shorter cold start times, quicker re-deployments for Serverless.
 
-4. 🎯 **Based on SoTA Cross-encoders**:
+4. 🎯 **Based on SoTA Cross-encoders and other models**:
+    - How good are Zero-shot rerankers - look at the reference section.
     - Below are the list of models supported as of now.
         * ms-marco-TinyBERT-L-2-v2 (default)
         * ms-marco-MiniLM-L-12-v2
@@ -54,29 +55,83 @@ ranker = Ranker(model_name="ms-marco-MultiBERT-L-12", cache_dir="/opt")
 
 ```python
 query = "How to speedup LLMs?"
-# You could your internal passage record ids or simple numeric indices.
 passages = [
-    {"id": 1, "text": "Introduce *lookahead decoding*: - a parallel decoding algo to accelerate LLM inference - w/o the need for a draft model or a data store - linearly decreases # decoding steps relative to log(FLOPs) used per decoding step."},
-    {"id": 2, "text": "LLM inference efficiency will be one of the most crucial topics for both industry and academia, simply because the more efficient you are, the more $$$ you will save. vllm project is a must-read for this direction, and now they have just released the paper"},
-    {"id": 3, "text": "There are many ways to increase LLM inference throughput (tokens/second) and decrease memory footprint, sometimes at the same time. Here are a few methods I’ve found effective when working with Llama 2. These methods are all well-integrated with Hugging Face. This list is far from exhaustive; some of these techniques can be used in combination with each other and there are plenty of others to try. - Bettertransformer (Optimum Library): Simply call `model.to_bettertransformer()` on your Hugging Face model for a modest improvement in tokens per second. - Fp4 Mixed-Precision (Bitsandbytes): Requires minimal configuration and dramatically reduces the model's memory footprint. - AutoGPTQ: Time-consuming but leads to a much smaller model and faster inference. The quantization is a one-time cost that pays off in the long run."},
-    {"id": 4, "text": "Ever want to make your LLM inference go brrrrr but got stuck at implementing speculative decoding and finding the suitable draft model? No more pain! Thrilled to unveil Medusa, a simple framework that removes the annoying draft model while getting 2x speedup."},
-    {"id": 5, "text": "vLLM is a fast and easy-to-use library for LLM inference and serving. vLLM is fast with: State-of-the-art serving throughput Efficient management of attention key and value memory with PagedAttention Continuous batching of incoming requests Optimized CUDA kernels"}
+   {
+      "id":1,
+      "text":"Introduce *lookahead decoding*: - a parallel decoding algo to accelerate LLM inference - w/o the need for a draft model or a data store - linearly decreases # decoding steps relative to log(FLOPs) used per decoding step.",
+      "meta": {"additional": "info1"}
+   },
+   {
+      "id":2,
+      "text":"LLM inference efficiency will be one of the most crucial topics for both industry and academia, simply because the more efficient you are, the more $$$ you will save. vllm project is a must-read for this direction, and now they have just released the paper",
+      "meta": {"additional": "info2"}
+   },
+   {
+      "id":3,
+      "text":"There are many ways to increase LLM inference throughput (tokens/second) and decrease memory footprint, sometimes at the same time. Here are a few methods I’ve found effective when working with Llama 2. These methods are all well-integrated with Hugging Face. This list is far from exhaustive; some of these techniques can be used in combination with each other and there are plenty of others to try. - Bettertransformer (Optimum Library): Simply call `model.to_bettertransformer()` on your Hugging Face model for a modest improvement in tokens per second. - Fp4 Mixed-Precision (Bitsandbytes): Requires minimal configuration and dramatically reduces the model's memory footprint. - AutoGPTQ: Time-consuming but leads to a much smaller model and faster inference. The quantization is a one-time cost that pays off in the long run.",
+      "meta": {"additional": "info3"}
+
+   },
+   {
+      "id":4,
+      "text":"Ever want to make your LLM inference go brrrrr but got stuck at implementing speculative decoding and finding the suitable draft model? No more pain! Thrilled to unveil Medusa, a simple framework that removes the annoying draft model while getting 2x speedup.",
+      "meta": {"additional": "info4"}
+   },
+   {
+      "id":5,
+      "text":"vLLM is a fast and easy-to-use library for LLM inference and serving. vLLM is fast with: State-of-the-art serving throughput Efficient management of attention key and value memory with PagedAttention Continuous batching of incoming requests Optimized CUDA kernels",
+      "meta": {"additional": "info5"}
+   }
 ]
 
-results = ranker.rerank(query, passages)
+rerankrequest = RerankRequest(query=query, passages=passages)
+results = ranker.rerank(rerankrequest)
 print(results)
-
 ```
 
 ```python 
-# o/p from default reranker
+# Reranked output from default reranker
 [
-  {'id': 4, 'score': 0.018163264, 'passage': 'Ever want to make your LLM inference go brrrrr but got stuck at implementing speculative decoding and finding the suitable draft model? No more pain! Thrilled to unveil Medusa, a simple framework that removes the annoying draft model while getting 2x speedup.'}
-  {'id': 5, 'score': 0.013987866, 'passage': 'vLLM is a fast and easy-to-use library for LLM inference and serving. vLLM is fast with: State-of-the-art serving throughput Efficient management of attention key and value memory with PagedAttention Continuous batching of incoming requests Optimized CUDA kernels'}
-  {'id': 3, 'score': 0.00091874925, 'passage': "There are many ways to increase LLM inference throughput (tokens/second) and decrease memory footprint, sometimes at the same time. Here are a few methods I’ve found effective when working with Llama 2. These methods are all well-integrated with Hugging Face. This list is far from exhaustive; some of these techniques can be used in combination with each other and there are plenty of others to try. - Bettertransformer (Optimum Library): Simply call `model.to_bettertransformer()` on your Hugging Face model for a modest improvement in tokens per second. - Fp4 Mixed-Precision (Bitsandbytes): Requires minimal configuration and dramatically reduces the model's memory footprint. - AutoGPTQ: Time-consuming but leads to a much smaller model and faster inference. The quantization is a one-time cost that pays off in the long run."}
-  {'id': 1, 'score': 0.00076141005, 'passage': 'Introduce *lookahead decoding*: - a parallel decoding algo to accelerate LLM inference - w/o the need for a draft model or a data store - linearly decreases # decoding steps relative to log(FLOPs) used per decoding step.'}
-  {'id': 2, 'score': 0.0002851765, 'passage': 'LLM inference efficiency will be one of the most crucial topics for both industry and academia, simply because the more efficient you are, the more $$$ you will save. vllm project is a must-read for this direction, and now they have just released the paper'}
-
+   {
+      "id":4,
+      "text":"Ever want to make your LLM inference go brrrrr but got stuck at implementing speculative decoding and finding the suitable draft model? No more pain! Thrilled to unveil Medusa, a simple framework that removes the annoying draft model while getting 2x speedup.",
+      "meta":{
+         "additional":"info4"
+      },
+      "score":0.016847236
+   },
+   {
+      "id":5,
+      "text":"vLLM is a fast and easy-to-use library for LLM inference and serving. vLLM is fast with: State-of-the-art serving throughput Efficient management of attention key and value memory with PagedAttention Continuous batching of incoming requests Optimized CUDA kernels",
+      "meta":{
+         "additional":"info5"
+      },
+      "score":0.011563735
+   },
+   {
+      "id":3,
+      "text":"There are many ways to increase LLM inference throughput (tokens/second) and decrease memory footprint, sometimes at the same time. Here are a few methods I’ve found effective when working with Llama 2. These methods are all well-integrated with Hugging Face. This list is far from exhaustive; some of these techniques can be used in combination with each other and there are plenty of others to try. - Bettertransformer (Optimum Library): Simply call `model.to_bettertransformer()` on your Hugging Face model for a modest improvement in tokens per second. - Fp4 Mixed-Precision (Bitsandbytes): Requires minimal configuration and dramatically reduces the model's memory footprint. - AutoGPTQ: Time-consuming but leads to a much smaller model and faster inference. The quantization is a one-time cost that pays off in the long run.",
+      "meta":{
+         "additional":"info3"
+      },
+      "score":0.00081340264
+   },
+   {
+      "id":1,
+      "text":"Introduce *lookahead decoding*: - a parallel decoding algo to accelerate LLM inference - w/o the need for a draft model or a data store - linearly decreases # decoding steps relative to log(FLOPs) used per decoding step.",
+      "meta":{
+         "additional":"info1"
+      },
+      "score":0.00063596206
+   },
+   {
+      "id":2,
+      "text":"LLM inference efficiency will be one of the most crucial topics for both industry and academia, simply because the more efficient you are, the more $$$ you will save. vllm project is a must-read for this direction, and now they have just released the paper",
+      "meta":{
+         "additional":"info2"
+      },
+      "score":0.00024851
+   }
 ]
 ```
 
@@ -104,3 +159,14 @@ own custom dir. You can do so in your Dockerfile and use it for loading the mode
 ```python
 ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
 ```
+
+## References:
+
+1. **In-domain and Zeroshot performance of Cross Encoders fine-tuned on MS-MARCO**
+  <center><img src="./images/CE_BEIR.png" width=600/></center>
+
+<br/>
+
+2. 1. **In-domain and Zeroshot performance of RankT5 fine-tuned on MS-MARCO**
+  <center><img src="./images/RankT5_BEIR.png" width=600/></center>
+<br/>

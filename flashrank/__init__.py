@@ -1,1 +1,1 @@
-from flashrank import Ranker
+from .Ranker import Ranker, RerankRequest
