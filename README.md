@@ -171,3 +171,10 @@ ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
 2. **In-domain and Zeroshot performance of RankT5 fine-tuned on MS-MARCO**
   <center><img src="./images/RankT5_BEIR.png" width=450/></center>
 <br/>
+
+## How to Cite
+
+To cite this repository in your work, use the following citation:
+
+> [Prithiviraj Damodaran]. (2023). *FlashRank, Lightest and Fastest 2nd Stage Reranker for search pipelines*. Zenodo. https://zenodo.org/doi/10.5281/zenodo.10426927
+
