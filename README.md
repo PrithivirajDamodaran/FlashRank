@@ -174,7 +174,4 @@ ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
 
 ## How to Cite
 
-To cite this repository in your work, use the following citation:
-
-> [Prithiviraj Damodaran]. (2023). *FlashRank, Lightest and Fastest 2nd Stage Reranker for search pipelines*. Zenodo. https://zenodo.org/doi/10.5281/zenodo.10426927
-
+To cite this repository in your work please click the "cite this repository" link on the right side (bewlow repo descriptions and tags)
