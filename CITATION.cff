@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: Please cite it as below.
+title: FlashRank, Lightest and Fastest 2nd Stage Reranker for search pipelines.
+doi: 10.5281/zenodo.10426927
+date-released: 23-Dec-2023
+
+authors:
+  - family-names: Damodaran
+    given-names: Prithiviraj
+    affiliation: Independent Researcher
+
+version: 1.0.0
+url: https://github.com/PrithivirajDamodaran/FlashRank
