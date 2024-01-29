@@ -20,7 +20,8 @@ class Ranker:
 
     def __init__(self, 
                  model_name = default_model, 
-                 cache_dir= default_cache_dir):
+                 cache_dir= default_cache_dir,
+                 max_length = 512):
 
         self.cache_dir = Path(cache_dir)
         
@@ -36,8 +37,9 @@ class Ranker:
             
         model_file = model_file_map[model_name]
         
+        
         self.session = ort.InferenceSession(self.cache_dir / model_name / model_file)
-        self.tokenizer = self._get_tokenizer()
+        self.tokenizer = self._get_tokenizer(max_length)
 
     def _download_model_files(self, model_name):
         
@@ -164,4 +166,5 @@ class Ranker:
 
         return passages
     
+
 
