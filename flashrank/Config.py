@@ -6,5 +6,5 @@ model_file_map = {
     "ms-marco-MiniLM-L-12-v2": "flashrank-MiniLM-L-12-v2_Q.onnx",
     "ms-marco-MultiBERT-L-12": "flashrank-MultiBERT-L12_Q.onnx",
     "rank-T5-flan": "flashrank-rankt5_Q.onnx",
-    "ce-esci-MiniLM-L12-v2.zip": "flashrank-ce-esci-MiniLM-L12-v2_Q.onnx"
+    "ce-esci-MiniLM-L12-v2": "flashrank-ce-esci-MiniLM-L12-v2_Q.onnx"
 }
