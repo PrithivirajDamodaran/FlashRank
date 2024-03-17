@@ -36,6 +36,7 @@ pip install flashrank
 ## Usage:
 ```python
 from flashrank import Ranker, RerankRequest
+
 # Nano (~4MB), blazing fast model & competitive performance (ranking precision).
 ranker = Ranker()
 
