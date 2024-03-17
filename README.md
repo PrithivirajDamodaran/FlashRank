@@ -18,11 +18,11 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
 4. 🎯 **Based on SoTA Cross-encoders and other models**:
     - How good are Zero-shot rerankers - look at the reference section.
     - Below are the list of models supported as of now.
-        * ms-marco-TinyBERT-L-2-v2 (default) [Model card](https://huggingface.co/cross-encoder/ms-marco-TinyBERT-L-2)
-        * ms-marco-MiniLM-L-12-v2 [Model card](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L-12-v2)
-        * rank-T5-flan (Best non cross-encoder reranker) [Model card](https://huggingface.co/bergum/rank-T5-flan)
-        * ms-marco-MultiBERT-L-12  (Multi-lingual, [supports 100+ languages](https://github.com/google-research/bert/blob/master/multilingual.md#list-of-languages))
-        * ce-esci-MiniLM-L12-v2 [FT on Amazon ESCI dataset](https://github.com/amazon-science/esci-data) (This is interesting because most models are FT on MSFT MARCO Bing queries) [Model card](https://huggingface.co/metarank/ce-esci-MiniLM-L12-v2)
+        * `ms-marco-TinyBERT-L-2-v2` (default) [Model card](https://huggingface.co/cross-encoder/ms-marco-TinyBERT-L-2)
+        * `ms-marco-MiniLM-L-12-v2` [Model card](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L-12-v2)
+        * `rank-T5-flan` (Best non cross-encoder reranker) [Model card](https://huggingface.co/bergum/rank-T5-flan)
+        * `ms-marco-MultiBERT-L-12`  (Multi-lingual, [supports 100+ languages](https://github.com/google-research/bert/blob/master/multilingual.md#list-of-languages))
+        * `ce-esci-MiniLM-L12-v2` [FT on Amazon ESCI dataset](https://github.com/amazon-science/esci-data) (This is interesting because most models are FT on MSFT MARCO Bing queries) [Model card](https://huggingface.co/metarank/ce-esci-MiniLM-L12-v2)
     - Models in roadmap:
         * InRanker
     - Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
