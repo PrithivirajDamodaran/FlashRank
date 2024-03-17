@@ -1,4 +1,4 @@
-model_url = 'https://storage.googleapis.com/flashrank/{}.zip'
+model_url = 'https://storage.googleapis.com/flash-rank/{}.zip'
 default_cache_dir = "/tmp"
 default_model = "ms-marco-TinyBERT-L-2-v2"
 model_file_map = {
