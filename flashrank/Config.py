@@ -1,6 +1,7 @@
-# My cloud bucket and $ wont be abused anymore :-)
-
+# Moved to HF - My cloud bucket and $ wont be abused anymore :-)
+# THE HF Repo is UNDER CC-BY-SA LICENSE. USE APPROPRIATELY.
 model_url = 'https://huggingface.co/prithivida/flashrank/resolve/main/{}.zip'
+
 default_cache_dir = "/tmp"
 default_model = "ms-marco-TinyBERT-L-2-v2"
 model_file_map = {
