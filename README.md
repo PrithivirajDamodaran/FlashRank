@@ -1,6 +1,7 @@
 # [IMPORTANT UPDATE]
 
-*A clone library called **SwiftRank is pointing to our model buckets, we are working on a interim solution to avoid this stealing**. Thank you for patience and understanding.*
+~~*A clone library called **SwiftRank is pointing to our model buckets, we are working on a interim solution to avoid this stealing**. Thank you for patience and understanding.*~~
+This issue is resolved, **please upgrade to continue** pip install -U flashrank. 
 
 # 🏎️ FlashRank
 Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA cross-encoders, with gratitude to all the model owners.
