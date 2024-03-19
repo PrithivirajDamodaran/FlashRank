@@ -1,4 +1,6 @@
-model_url = 'https://storage.googleapis.com/flash-rank/{}.zip'
+# My cloud bucket and $ wont be abused anymore :-)
+
+model_url = 'https://huggingface.co/prithivida/flashrank/resolve/main/{}.zip'
 default_cache_dir = "/tmp"
 default_model = "ms-marco-TinyBERT-L-2-v2"
 model_file_map = {
