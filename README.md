@@ -2,7 +2,7 @@
 
 ~~*A clone library called **SwiftRank is pointing to our model buckets, we are working on a interim solution to avoid this stealing**. Thank you for patience and understanding.*~~
 
-This issue is resolved, the models are in HF now. **please upgrade to continue** pip install -U flashrank. Thank you for patience and understanding
+This issue is resolved. The models are in HF now. **Please upgrade to continue** pip install -U flashrank. Thank you for your patience and understanding
 
 # 🏎️ FlashRank
 Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA cross-encoders, with gratitude to all the model owners.
@@ -13,7 +13,7 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
     
 2. ⏱️ **Super-fast**:
     - Rerank speed is a function of **# of tokens in passages, query + model depth (layers)**
-    - To give an idea, Time taken by the example (in code) using the default model is below.
+    - To give an idea, the Time taken by the example (in code) using the default model is below.
     - <center><img src="./images/time.png" width=600/></center>
     - Detailed benchmarking, TBD
 
@@ -31,7 +31,7 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
         * `ce-esci-MiniLM-L12-v2` [FT on Amazon ESCI dataset](https://github.com/amazon-science/esci-data) (This is interesting because most models are FT on MSFT MARCO Bing queries) [Model card](https://huggingface.co/metarank/ce-esci-MiniLM-L12-v2)
     - Models in roadmap:
         * InRanker
-    - Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
+    - Why only sleeker models? Reranking is the final leg of larger retrieval pipelines; idea is to avoid any extra overhead, especially for user-facing scenarios. To that end, models with tiny footprints that don't need any specialized hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for new models as you see fit.
 
 
 ## 🚀 Installation:
@@ -136,7 +136,7 @@ print(results)
    },
    {
       "id":2,
-      "text":"LLM inference efficiency will be one of the most crucial topics for both industry and academia, simply because the more efficient you are, the more $$$ you will save. vllm project is a must-read for this direction, and now they have just released the paper",
+      "text":"LLM inference efficiency will be one of the most crucial topics for industry and academia, simply because the more efficient you are, the more $$$ you will save. VLLM project is a must-read for this direction, and now they have just released the paper"
       "meta":{
          "additional":"info2"
       },
@@ -147,12 +147,12 @@ print(results)
 
 ## You can use it with any search & retrieval pipeline:
 
-1. **Lexical Search (RegularDBs that supports full-text search or Inverted Index)**
+1. **Lexical Search (RegularDBs that support full-text search or Inverted Index)**
   <center><img src="./images/lexical_search.png" width=600/></center>
 
 <br/>
 
-2. **Semantic Search / RAG usecases (VectorDBs)**
+2. **Semantic Search / RAG use cases (VectorDBs)**
   <center><img src="./images/vector_search_rag.png" width=600/></center>
 <br/>
 
@@ -162,9 +162,9 @@ print(results)
 <br/>
 
 ## Deployment patterns
-#### How to use it in a AWS Lambda function ?
-In AWS or other serverless environments the entire VM is read-only you might have to create your 
-own custom dir. You can do so in your Dockerfile and use it for loading the models (and eventually as a cache between warm calls). You can do it during init with cache_dir parameter. 
+#### How to use it in an AWS Lambda function?
+In AWS or other serverless environments, the entire VM is read-only, so you might have to create your 
+custom dir. You can do so in your Dockerfile and use it to load the models (and eventually as a cache between warm calls). You can do it during init with the cache_dir parameter. 
 
 ```python
 ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
@@ -183,4 +183,4 @@ ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
 
 ## How to Cite
 
-To cite this repository in your work please click the "cite this repository" link on the right side (bewlow repo descriptions and tags)
+To cite this repository in your work, please click the "cite this repository" link on the right side (below repo descriptions and tags)
