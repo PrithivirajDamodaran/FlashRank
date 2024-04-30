@@ -174,7 +174,8 @@ class Ranker:
         passages = request.passages
 
         # self.llm_model will be instantiated for GGUF based Listwise LLM models
-        if self.llm_model:
+        if self.llm_model is not None:
+            print("Running listwise ranking..")
             num_of_passages = len(passages)
             messages = self._get_prefix_prompt(query, num_of_passages)
 
@@ -204,6 +205,7 @@ class Ranker:
 
         # self.session will be instantiated for ONNX based pairwise CE models
         else:
+            print("Running pairwise ranking..")
             query_passage_pairs = [[query, passage["text"]] for passage in passages]
 
             input_text = self.tokenizer.encode_batch(query_passage_pairs)
