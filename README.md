@@ -7,7 +7,9 @@
 This issue is resolved, the models are in HF now. **please upgrade to continue** pip install -U flashrank. Thank you for patience and understanding
 
 # 🏎️ What is it?
-Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA LLMs and cross-encoders, with gratitude to all the model owners. Supports:
+Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA LLMs and cross-encoders, with gratitude to all the model owners. 
+
+Supports:
 
 - Pairwise / Pointwise rerankers. (Cross encoder based)
 - Listwise LLM based rerankers. (LLM based)
@@ -15,11 +17,12 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
 
 # Table of Contents  
 
-1. [Features](##Features)  
-2. [Installation](##Installation)
-3. [Getting started](##Gettingstarted)
-4. [Deployment patterns](##Deploymentpatterns)
-5. [How to Cite?](##HowtoCite?)
+1. [Features](##features)  
+2. [Installation](##installation)
+3. [Getting started](##getting-started)
+4. [Deployment patterns](##deployment-patterns)
+5. [How to Cite?](##how-to-cite)
+5. [Papers citing flashrank](##papers-citing-flashrank) - WIP
 
 
 ## Features
