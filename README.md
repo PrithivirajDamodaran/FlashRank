@@ -1,18 +1,28 @@
 <img src=./images/logo.png width=100%>
 
-# [IMPORTANT UPDATE]
+## [IMPORTANT UPDATE]
 
 ~~*A clone library called **SwiftRank is pointing to our model buckets, we are working on a interim solution to avoid this stealing**. Thank you for patience and understanding.*~~
 
 This issue is resolved, the models are in HF now. **please upgrade to continue** pip install -U flashrank. Thank you for patience and understanding
 
-# 🏎️ FlashRank
-Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA cross-encoders, with gratitude to all the model owners.
+# 🏎️ What is it?
+Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA LLMs and cross-encoders, with gratitude to all the model owners. Supports:
 
-## Supports:
 - Pairwise / Pointwise rerankers. (Cross encoder based)
 - Listwise LLM based rerankers. (LLM based)
 (see below for full list of supported models)
+
+# Table of Contents  
+
+1. [Features](##Features)  
+2. [Installation](##Installation)
+3. [Getting started](##Gettingstarted)
+4. [Deployment patterns](##Deploymentpatterns)
+5. [How to Cite?](##HowtoCite?)
+
+
+## Features
 
 1. ⚡ **Ultra-lite**: 
     - **No Torch or Transformers** needed. Runs on CPU.
@@ -42,12 +52,12 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
     - Why sleeker models are preferred ? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
 
 
-## 🚀 Installation:
+## Installation:
 ```python 
 pip install flashrank
 ```
 
-## Usage:
+## Getting started:
 ```python
 from flashrank import Ranker, RerankRequest
 
@@ -193,6 +203,6 @@ ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
   <center><img src="./images/RankT5_BEIR.png" width=450/></center>
 <br/>
 
-## How to Cite
+## How to Cite?
 
 To cite this repository in your work please click the "cite this repository" link on the right side (bewlow repo descriptions and tags)
