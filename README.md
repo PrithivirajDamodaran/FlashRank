@@ -1,4 +1,8 @@
+
 <img src=./images/logo.png width=100%>
+
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11093524.svg)](https://doi.org/10.5281/zenodo.11093524)
 
 ## [IMPORTANT UPDATE]
 
@@ -22,7 +26,7 @@ Supports:
 3. [Getting started](#getting-started)
 4. [Deployment patterns](#deployment-patterns)
 5. [How to Cite?](#how-to-cite)
-5. [Papers citing flashrank](#papers-citing-flashrank) - WIP
+5. [Papers citing flashrank](#papers-citing-flashrank) 
 
 
 ## Features
@@ -209,3 +213,12 @@ ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/opt")
 ## How to Cite?
 
 To cite this repository in your work please click the "cite this repository" link on the right side (bewlow repo descriptions and tags)
+
+
+## Papers citing flashrank
+
+- [Bryndza at ClimateActivism 2024: Stance, Target and Hate Event
+Detection via Retrieval-Augmented GPT-4 and LLaMA](https://arxiv.org/pdf/2402.06549)
+
+- [Stance and Hate Event Detection in Tweets Related to
+Climate Activism - Shared Task at CASE 2024](https://aclanthology.org/2024.case-1.33.pdf)
