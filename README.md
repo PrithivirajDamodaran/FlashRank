@@ -17,12 +17,12 @@ Supports:
 
 # Table of Contents  
 
-1. [Features](##features)  
-2. [Installation](##installation)
-3. [Getting started](##getting-started)
-4. [Deployment patterns](##deployment-patterns)
-5. [How to Cite?](##how-to-cite)
-5. [Papers citing flashrank](##papers-citing-flashrank) - WIP
+1. [Features](#features)  
+2. [Installation](#installation)
+3. [Getting started](#getting-started)
+4. [Deployment patterns](#deployment-patterns)
+5. [How to Cite?](#how-to-cite)
+5. [Papers citing flashrank](#papers-citing-flashrank) - WIP
 
 
 ## Features
