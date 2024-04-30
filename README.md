@@ -7,6 +7,11 @@ This issue is resolved, the models are in HF now. **please upgrade to continue**
 # 🏎️ FlashRank
 Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA cross-encoders, with gratitude to all the model owners.
 
+## Flashrank supports:
+- Pairwise / Pointwise rerankers.
+- Listwise LLM based rerankers.
+(see below for list of supported models)
+
 1. ⚡ **Ultra-lite**: 
     - **No Torch or Transformers** needed. Runs on CPU.
     - Boasts the **tiniest reranking model in the world, ~4MB**.
@@ -29,9 +34,10 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
         * `rank-T5-flan` (Best non cross-encoder reranker) [Model card](https://huggingface.co/bergum/rank-T5-flan)
         * `ms-marco-MultiBERT-L-12`  (Multi-lingual, [supports 100+ languages](https://github.com/google-research/bert/blob/master/multilingual.md#list-of-languages))
         * `ce-esci-MiniLM-L12-v2` [FT on Amazon ESCI dataset](https://github.com/amazon-science/esci-data) (This is interesting because most models are FT on MSFT MARCO Bing queries) [Model card](https://huggingface.co/metarank/ce-esci-MiniLM-L12-v2)
+        * `rank_zephyr_7b_v1_full` (4-bit-quantised GGUF) [Model card](https://huggingface.co/castorini/rank_zephyr_7b_v1_full) (Offers very competitive performance, with large context window and relatively faster for a 4GB model)
     - Models in roadmap:
         * InRanker
-    - Why only sleeker models? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
+    - Why sleeker models are preferred ? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
 
 
 ## 🚀 Installation:
@@ -60,6 +66,10 @@ or
 
 # Medium (~150MB), slower model with competitive performance (ranking precision) for 100+ languages  (don't use for english)
 ranker = Ranker(model_name="ms-marco-MultiBERT-L-12", cache_dir="/opt")
+
+or 
+
+ranker = Ranker(model_name="rank_zephyr_7b_v1_full", max_length=1024) # adjust max_length based on your passage length
 ```
 
 ```python
