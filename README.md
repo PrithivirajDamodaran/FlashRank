@@ -1,3 +1,5 @@
+<img src=./images/logo.png width=100%>
+
 # [IMPORTANT UPDATE]
 
 ~~*A clone library called **SwiftRank is pointing to our model buckets, we are working on a interim solution to avoid this stealing**. Thank you for patience and understanding.*~~
@@ -7,10 +9,10 @@ This issue is resolved, the models are in HF now. **please upgrade to continue**
 # 🏎️ FlashRank
 Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA cross-encoders, with gratitude to all the model owners.
 
-## Flashrank supports:
-- Pairwise / Pointwise rerankers.
-- Listwise LLM based rerankers.
-(see below for list of supported models)
+## Supports:
+- Pairwise / Pointwise rerankers. (Cross encoder based)
+- Listwise LLM based rerankers. (LLM based)
+(see below for full list of supported models)
 
 1. ⚡ **Ultra-lite**: 
     - **No Torch or Transformers** needed. Runs on CPU.
