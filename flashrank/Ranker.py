@@ -47,6 +47,7 @@ class Ranker:
         self._prepare_model_dir(model_name)
         model_file = model_file_map[model_name]
 
+        self.llm_model = None
         if model_name in listwise_rankers:
             self.llm_model = Llama(
               model_path=str(self.model_dir / model_file),
