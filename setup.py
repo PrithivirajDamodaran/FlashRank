@@ -2,14 +2,15 @@ from setuptools import setup, find_packages
 
 setup(
     name='FlashRank', 
-    version='0.2.1', 
+    version='0.2.2', 
     packages=find_packages(),
     install_requires=[
         'tokenizers',
         'onnxruntime',
         'numpy',
         'requests',
-        'tqdm'
+        'tqdm',
+        'llama-cpp-python==0.2.67'
     ],  
     author='Prithivi Da',
     author_email='',
