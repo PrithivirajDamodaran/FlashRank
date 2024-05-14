@@ -10,7 +10,7 @@ from tqdm import tqdm
 from flashrank.Config import default_model, default_cache_dir, model_url, model_file_map, listwise_rankers
 import collections
 from typing import Optional, List, Dict, Any
-from llama_cpp import Llama
+import logging
 
 class RerankRequest:
     """ Represents a reranking request with a query and a list of passages. 
@@ -34,14 +34,20 @@ class Ranker:
         tokenizer (Tokenizer): The tokenizer for text processing.
     """
 
-    def __init__(self, model_name: str = default_model, cache_dir: str = default_cache_dir, max_length: int = 512):
+    def __init__(self, model_name: str = default_model, cache_dir: str = default_cache_dir, max_length: int = 512, log_level: str = "INFO"):
         """ Initializes the Ranker class with specified model and cache settings.
 
         Args:
             model_name (str): The name of the model to be used.
             cache_dir (str): The directory where models are cached.
             max_length (int): The maximum length of the tokens.
+            log_level (str): Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
         """
+        
+        # Setting up logging
+        logging.basicConfig(level=getattr(logging, log_level.upper(), logging.INFO))
+        self.logger = logging.getLogger(__name__)
+
         self.cache_dir: Path = Path(cache_dir)
         self.model_dir: Path = self.cache_dir / model_name
         self._prepare_model_dir(model_name)
@@ -49,6 +55,7 @@ class Ranker:
 
         self.llm_model = None
         if model_name in listwise_rankers:
+            from llama_cpp import Llama
             self.llm_model = Llama(
               model_path=str(self.model_dir / model_file),
               n_ctx=max_length,  
@@ -65,11 +72,11 @@ class Ranker:
             model_name (str): The name of the model to be prepared.
         """
         if not self.cache_dir.exists():
-            print(f"Cache directory {self.cache_dir} not found. Creating it..")
+            self.logger.debug(f"Cache directory {self.cache_dir} not found. Creating it..")
             self.cache_dir.mkdir(parents=True, exist_ok=True)
         
         if not self.model_dir.exists():
-            print(f"Downloading {model_name}...")
+            self.logger.info(f"Downloading {model_name}...")
             self._download_model_files(model_name)
 
     def _download_model_files(self, model_name: str):
@@ -175,7 +182,7 @@ class Ranker:
 
         # self.llm_model will be instantiated for GGUF based Listwise LLM models
         if self.llm_model is not None:
-            print("Running listwise ranking..")
+            self.logger.debug("Running listwise ranking..")
             num_of_passages = len(passages)
             messages = self._get_prefix_prompt(query, num_of_passages)
 
@@ -205,7 +212,7 @@ class Ranker:
 
         # self.session will be instantiated for ONNX based pairwise CE models
         else:
-            print("Running pairwise ranking..")
+            self.logger.debug("Running pairwise ranking..")
             query_passage_pairs = [[query, passage["text"]] for passage in passages]
 
             input_text = self.tokenizer.encode_batch(query_passage_pairs)
@@ -221,8 +228,13 @@ class Ranker:
 
             outputs = self.session.run(None, onnx_input)
 
-            scores = np.exp(outputs[0]) / (1 + np.exp(outputs[0])) if outputs[0].shape[1] > 1 else np.exp(outputs[0].flatten()) / (1 + np.exp(outputs[0].flatten()))
-            scores = scores.tolist()
+            logits = outputs[0]
+
+            if logits.shape[1] == 1:
+                scores = 1 / (1 + np.exp(-logits.flatten()))
+            else:
+                exp_logits = np.exp(logits)
+                scores = exp_logits[:, 1] / np.sum(exp_logits, axis=1)
 
             for score, passage in zip(scores, passages):
                 passage["score"] = score
