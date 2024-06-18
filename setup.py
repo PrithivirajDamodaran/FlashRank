@@ -6,8 +6,8 @@ setup(
     packages=find_packages(),
     install_requires=[
         'tokenizers',
-        'onnxruntime',
-        'numpy',
+        'onnxruntime<2',
+        'numpy<2',
         'requests',
         'tqdm',
         'llama-cpp-python==0.2.67'
