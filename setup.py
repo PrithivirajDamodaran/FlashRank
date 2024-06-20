@@ -10,7 +10,7 @@ setup(
         'numpy',
         'requests',
         'tqdm',
-        'llama-cpp-python==0.2.67'
+        'llama-cpp-python==0.2.76'
     ],  
     author='Prithivi Da',
     author_email='',
