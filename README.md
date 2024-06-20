@@ -218,6 +218,9 @@ To cite this repository in your work please click the "cite this repository" lin
 
 ## Papers citing flashrank
 
+- [COS-Mix: Cosine Similarity and Distance Fusion for
+Improved Information Retrieval](https://arxiv.org/pdf/2406.00638)
+
 - [Bryndza at ClimateActivism 2024: Stance, Target and Hate Event
 Detection via Retrieval-Augmented GPT-4 and LLaMA](https://arxiv.org/pdf/2402.06549)
 
