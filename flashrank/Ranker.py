@@ -63,7 +63,7 @@ class Ranker:
                 n_threads=8,          
                 ) 
             except ImportError:
-                raise ImportError("llama-cpp-python is required for listwise ranking. Please install it using 'pip install flashrank[listwise]'.")    
+                raise ImportError("Please install it using 'pip install flashrank[listwise]' to run LLM based listwise rerankers.")    
         else:
             self.session = ort.InferenceSession(str(self.model_dir / model_file))
             self.tokenizer: Tokenizer = self._get_tokenizer(max_length)

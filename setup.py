@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='FlashRank', 
-    version='0.2.7', 
+    version='0.2.8', 
     packages=find_packages(),
     install_requires=[
         'tokenizers',
@@ -12,7 +12,6 @@ setup(
         'tqdm'
     ],  
     extras_require={
-        'pairwise': [],
         'listwise': ['llama-cpp-python==0.2.76']
     },
     author='Prithivi Da',
