@@ -55,12 +55,15 @@ class Ranker:
 
         self.llm_model = None
         if model_name in listwise_rankers:
-            from llama_cpp import Llama
-            self.llm_model = Llama(
-              model_path=str(self.model_dir / model_file),
-              n_ctx=max_length,  
-              n_threads=8,          
-            ) 
+            try:
+                from llama_cpp import Llama
+                self.llm_model = Llama(
+                model_path=str(self.model_dir / model_file),
+                n_ctx=max_length,  
+                n_threads=8,          
+                ) 
+            except ImportError:
+                raise ImportError("llama-cpp-python is required for listwise ranking. Please install it using 'pip install flashrank[listwise]'.")    
         else:
             self.session = ort.InferenceSession(str(self.model_dir / model_file))
             self.tokenizer: Tokenizer = self._get_tokenizer(max_length)

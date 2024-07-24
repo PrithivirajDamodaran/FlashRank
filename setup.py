@@ -2,16 +2,19 @@ from setuptools import setup, find_packages
 
 setup(
     name='FlashRank', 
-    version='0.2.6', 
+    version='0.2.7', 
     packages=find_packages(),
     install_requires=[
         'tokenizers',
         'onnxruntime',
         'numpy',
         'requests',
-        'tqdm',
-        'llama-cpp-python==0.2.76'
+        'tqdm'
     ],  
+    extras_require={
+        'pairwise': [],
+        'listwise': ['llama-cpp-python==0.2.76']
+    },
     author='Prithivi Da',
     author_email='',
     description='Ultra lite & Super fast SoTA cross-encoder based re-ranking for your search & retrieval pipelines.',
