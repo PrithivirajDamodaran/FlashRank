@@ -61,9 +61,16 @@ Supports:
 
 
 ## Installation:
+### If you need lightweight pairwise rerankers [default]
 ```python 
-pip install flashrank
+pip install -U flashrank
 ```
+
+### If you need LLM based listwise rerankers
+```python 
+pip install -U flashrank[listwise]
+```
+
 
 ## Getting started:
 ```python
