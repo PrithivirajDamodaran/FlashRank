@@ -9,7 +9,8 @@ setup(
         'onnxruntime',
         'numpy',
         'requests',
-        'tqdm'
+        'tqdm',
+        'dataclasses;python_version>="3.6" and python_version<"3.7"',  # dataclasses are included in python 3.7+
     ],  
     extras_require={
         'listwise': ['llama-cpp-python==0.2.76']
