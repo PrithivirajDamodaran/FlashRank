@@ -10,6 +10,7 @@
 
 This issue is resolved, the models are in HF now. **please upgrade to continue** pip install -U flashrank. Thank you for patience and understanding
 
+
 # 🏎️ What is it?
 Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA LLMs and cross-encoders, with gratitude to all the model owners. 
 
@@ -55,6 +56,7 @@ Supports:
         * `ce-esci-MiniLM-L12-v2` [FT on Amazon ESCI dataset](https://github.com/amazon-science/esci-data) (This is interesting because most models are FT on MSFT MARCO Bing queries) [Model card](https://huggingface.co/metarank/ce-esci-MiniLM-L12-v2)
         * `rank_zephyr_7b_v1_full` (4-bit-quantised GGUF) [Model card](https://huggingface.co/castorini/rank_zephyr_7b_v1_full) (Offers very competitive performance, with large context window and relatively faster for a 4GB model).
             - **Important note:** Our current integration of `rank_zephyr` supports a max of 20 passages in one pass. The sliding window logic support is yet to be added.
+        * `miniReranker_arabic_v1` [Model card](https://huggingface.co/prithivida/miniReranker_arabic_v1)             
     - Models in roadmap:
         * InRanker
     - Why sleeker models are preferred ? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
