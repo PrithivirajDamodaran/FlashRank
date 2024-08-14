@@ -1,32 +1,46 @@
-import json
-from pathlib import Path
-from tokenizers import AddedToken, Tokenizer
-import onnxruntime as ort
-import numpy as np
-import os
-import zipfile
-import re
-import requests
-from tqdm import tqdm
-from flashrank.Config import default_model, default_cache_dir, model_url, model_file_map, listwise_rankers
 import collections
-from typing import Optional, List, Dict, Any
+import json
 import logging
+import os
+import re
+import zipfile
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import numpy as np
+import onnxruntime as ort
+import requests
+from tokenizers import AddedToken, Tokenizer
+from tqdm import tqdm
+
+from flashrank.Config import (
+    default_cache_dir,
+    default_model,
+    listwise_rankers,
+    model_file_map,
+    model_url,
+)
+
 
 class RerankRequest:
-    """ Represents a reranking request with a query and a list of passages. 
-    
+    """Represents a reranking request with a query and a list of passages.
+
     Attributes:
         query (Optional[str]): The query for which the passages need to be reranked.
         passages (List[Dict[str, Any]]): The list of passages to be reranked.
     """
 
-    def __init__(self, query: Optional[str] = None, passages: Optional[List[Dict[str, Any]]] = None):
+    def __init__(
+        self,
+        query: Optional[str] = None,
+        passages: Optional[List[Dict[str, Any]]] = None,
+    ):
         self.query: Optional[str] = query
         self.passages: List[Dict[str, Any]] = passages if passages is not None else []
 
+
 class Ranker:
-    """ A ranker class for reranking passages based on a provided query using a pre-trained model.
+    """A ranker class for reranking passages based on a provided query using a pre-trained model.
 
     Attributes:
         cache_dir (Path): Path to the cache directory where models are stored.
@@ -35,8 +49,14 @@ class Ranker:
         tokenizer (Tokenizer): The tokenizer for text processing.
     """
 
-    def __init__(self, model_name: str = default_model, cache_dir: str = default_cache_dir, max_length: int = 512, log_level: str = "INFO"):
-        """ Initializes the Ranker class with specified model and cache settings.
+    def __init__(
+        self,
+        model_name: str = default_model,
+        cache_dir: str = default_cache_dir,
+        max_length: int = 512,
+        log_level: str = "INFO",
+    ):
+        """Initializes the Ranker class with specified model and cache settings.
 
         Args:
             model_name (str): The name of the model to be used.
@@ -44,7 +64,7 @@ class Ranker:
             max_length (int): The maximum length of the tokens.
             log_level (str): Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
         """
-        
+
         # Setting up logging
         logging.basicConfig(level=getattr(logging, log_level.upper(), logging.INFO))
         self.logger = logging.getLogger(__name__)
@@ -58,54 +78,65 @@ class Ranker:
         if model_name in listwise_rankers:
             try:
                 from llama_cpp import Llama
+
                 self.llm_model = Llama(
-                model_path=str(self.model_dir / model_file),
-                n_ctx=max_length,  
-                n_threads=8,          
-                ) 
+                    model_path=str(self.model_dir / model_file),
+                    n_ctx=max_length,
+                    n_threads=8,
+                )
             except ImportError:
-                raise ImportError("Please install it using 'pip install flashrank[listwise]' to run LLM based listwise rerankers.")    
+                raise ImportError(
+                    "Please install it using 'pip install flashrank[listwise]' to run LLM based listwise rerankers."
+                )
         else:
             self.session = ort.InferenceSession(str(self.model_dir / model_file))
             self.tokenizer: Tokenizer = self._get_tokenizer(max_length)
 
     def _prepare_model_dir(self, model_name: str):
-        """ Ensures the model directory is prepared by downloading and extracting the model if not present.
+        """Ensures the model directory is prepared by downloading and extracting the model if not present.
 
         Args:
             model_name (str): The name of the model to be prepared.
         """
         if not self.cache_dir.exists():
-            self.logger.debug(f"Cache directory {self.cache_dir} not found. Creating it..")
+            self.logger.debug(
+                f"Cache directory {self.cache_dir} not found. Creating it.."
+            )
             self.cache_dir.mkdir(parents=True, exist_ok=True)
-        
+
         if not self.model_dir.exists():
             self.logger.info(f"Downloading {model_name}...")
             self._download_model_files(model_name)
 
     def _download_model_files(self, model_name: str):
-        """ Downloads and extracts the model files from a specified URL.
+        """Downloads and extracts the model files from a specified URL.
 
         Args:
             model_name (str): The name of the model to download.
         """
         local_zip_file = self.cache_dir / f"{model_name}.zip"
         formatted_model_url = model_url.format(model_name)
-        
+
         with requests.get(formatted_model_url, stream=True) as r:
             r.raise_for_status()
-            total_size = int(r.headers.get('content-length', 0))
-            with open(local_zip_file, 'wb') as f, tqdm(desc=local_zip_file.name, total=total_size, unit='iB', unit_scale=True, unit_divisor=1024) as bar:
+            total_size = int(r.headers.get("content-length", 0))
+            with open(local_zip_file, "wb") as f, tqdm(
+                desc=local_zip_file.name,
+                total=total_size,
+                unit="iB",
+                unit_scale=True,
+                unit_divisor=1024,
+            ) as bar:
                 for chunk in r.iter_content(chunk_size=8192):
                     size = f.write(chunk)
                     bar.update(size)
 
-        with zipfile.ZipFile(local_zip_file, 'r') as zip_ref:
+        with zipfile.ZipFile(local_zip_file, "r") as zip_ref:
             zip_ref.extractall(self.cache_dir)
         os.remove(local_zip_file)
 
     def _get_tokenizer(self, max_length: int = 512) -> Tokenizer:
-        """ Initializes and configures the tokenizer with padding and truncation.
+        """Initializes and configures the tokenizer with padding and truncation.
 
         Args:
             max_length (int): The maximum token length for truncation.
@@ -114,12 +145,18 @@ class Ranker:
             Tokenizer: Configured tokenizer for text processing.
         """
         config = json.load(open(str(self.model_dir / "config.json")))
-        tokenizer_config = json.load(open(str(self.model_dir / "tokenizer_config.json")))
+        tokenizer_config = json.load(
+            open(str(self.model_dir / "tokenizer_config.json"))
+        )
         tokens_map = json.load(open(str(self.model_dir / "special_tokens_map.json")))
         tokenizer = Tokenizer.from_file(str(self.model_dir / "tokenizer.json"))
 
-        tokenizer.enable_truncation(max_length=min(tokenizer_config["model_max_length"], max_length))
-        tokenizer.enable_padding(pad_id=config["pad_token_id"], pad_token=tokenizer_config["pad_token"])
+        tokenizer.enable_truncation(
+            max_length=min(tokenizer_config["model_max_length"], max_length)
+        )
+        tokenizer.enable_padding(
+            pad_id=config["pad_token_id"], pad_token=tokenizer_config["pad_token"]
+        )
 
         for token in tokens_map.values():
             if isinstance(token, str):
@@ -130,11 +167,13 @@ class Ranker:
         vocab_file = self.model_dir / "vocab.txt"
         if vocab_file.exists():
             tokenizer.vocab = self._load_vocab(vocab_file)
-            tokenizer.ids_to_tokens = collections.OrderedDict([(ids, tok) for tok, ids in tokenizer.vocab.items()])
+            tokenizer.ids_to_tokens = collections.OrderedDict(
+                [(ids, tok) for tok, ids in tokenizer.vocab.items()]
+            )
         return tokenizer
 
     def _load_vocab(self, vocab_file: Path) -> Dict[str, int]:
-        """ Loads the vocabulary from a file and returns it as an ordered dictionary.
+        """Loads the vocabulary from a file and returns it as an ordered dictionary.
 
         Args:
             vocab_file (Path): The file path to the vocabulary.
@@ -149,9 +188,9 @@ class Ranker:
             token = token.rstrip("\n")
             vocab[token] = index
         return vocab
-    
+
     def _get_prefix_prompt(self, query: str, num: int) -> List[Dict[str, str]]:
-        """ Get the system and first instruction prompt for LLM rerankers.
+        """Get the system and first instruction prompt for LLM rerankers.
 
         Args:
             query (str): The query for which the passages need to be reranked.
@@ -173,7 +212,7 @@ class Ranker:
         ]
 
     def _get_postfix_prompt(self, query: str, num: int) -> List[Dict[str, str]]:
-        """ Get the last instruction prompt for LLM rerankers.
+        """Get the last instruction prompt for LLM rerankers.
 
         Args:
             query (str): The query for which the passages need to be reranked.
@@ -190,7 +229,7 @@ class Ranker:
 
     @staticmethod
     def _extract_rank(rank_response: str) -> int:
-        """ Extracts the rank from the rank response.
+        """Extracts the rank from the rank response.
             Examples:
                 "[1]" => 1
                 "[23]" => 23
@@ -204,14 +243,16 @@ class Ranker:
         Raises:
             ValueError: If the rank response is not in the expected format.
         """
-        match = re.match(r'\[(\d+)\]', rank_response)
+        match = re.match(r"\[(\d+)\]", rank_response)
         if match:
             return int(match.group(1))
         else:
-            raise ValueError(f"Incorrect LLM response format. Expected rank in square brackets, received: {rank_response}.")
+            raise ValueError(
+                f"Incorrect LLM response format. Expected rank in square brackets, received: {rank_response}."
+            )
 
     def rerank(self, request: RerankRequest) -> List[Dict[str, Any]]:
-        """ Reranks a list of passages based on a query using a pre-trained model.
+        """Reranks a list of passages based on a query using a pre-trained model.
 
         Args:
             request (RerankRequest): The request containing the query and passages to rerank.
@@ -237,12 +278,9 @@ class Ranker:
                     }
                 )
                 messages.append(
-                        {
-                            "role": "assistant", 
-                            "content": f"Received passage [{rank + 1}]."
-                        }
+                    {"role": "assistant", "content": f"Received passage [{rank + 1}]."}
                 )
-                
+
                 result_map[rank + 1] = passage
 
             messages.append(self._get_postfix_prompt(query, num_of_passages))
@@ -250,7 +288,7 @@ class Ranker:
             results = []
             for rank in raw_ranks["choices"][0]["message"]["content"].split(" > "):
                 results.append(result_map[self._extract_rank(rank)])
-            return results    
+            return results
 
         # self.session will be instantiated for ONNX based pairwise CE models
         else:
@@ -262,9 +300,14 @@ class Ranker:
             token_type_ids = np.array([e.type_ids for e in input_text])
             attention_mask = np.array([e.attention_mask for e in input_text])
 
-            use_token_type_ids = token_type_ids is not None and not np.all(token_type_ids == 0)
+            use_token_type_ids = token_type_ids is not None and not np.all(
+                token_type_ids == 0
+            )
 
-            onnx_input = {"input_ids": input_ids.astype(np.int64), "attention_mask": attention_mask.astype(np.int64)}
+            onnx_input = {
+                "input_ids": input_ids.astype(np.int64),
+                "attention_mask": attention_mask.astype(np.int64),
+            }
             if use_token_type_ids:
                 onnx_input["token_type_ids"] = token_type_ids.astype(np.int64)
 
