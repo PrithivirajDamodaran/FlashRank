@@ -4,6 +4,7 @@ import logging
 import os
 import re
 import zipfile
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -22,6 +23,7 @@ from flashrank.Config import (
 )
 
 
+@dataclass
 class RerankRequest:
     """Represents a reranking request with a query and a list of passages.
 
@@ -30,13 +32,8 @@ class RerankRequest:
         passages (List[Dict[str, Any]]): The list of passages to be reranked.
     """
 
-    def __init__(
-        self,
-        query: Optional[str] = None,
-        passages: Optional[List[Dict[str, Any]]] = None,
-    ):
-        self.query: Optional[str] = query
-        self.passages: List[Dict[str, Any]] = passages if passages is not None else []
+    query: Optional[str] = None
+    passages: List[Dict[str, Any]] = field(default_factory=list)
 
 
 class Ranker:
