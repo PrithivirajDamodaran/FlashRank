@@ -150,7 +150,16 @@ class Ranker:
             vocab[token] = index
         return vocab
     
-    def _get_prefix_prompt(self, query, num):
+    def _get_prefix_prompt(self, query: str, num: int) -> List[Dict[str, str]]:
+        """ Get the system and first instruction prompt for LLM rerankers.
+
+        Args:
+            query (str): The query for which the passages need to be reranked.
+            num (int): The number of passages to be reranked.
+
+        Returns:
+            List[Dict[str, str]]: A list of dictionaries resembling the common LLM message format.
+        """
         return [
             {
                 "role": "system",
@@ -163,7 +172,16 @@ class Ranker:
             {"role": "assistant", "content": "Okay, please provide the passages."},
         ]
 
-    def _get_postfix_prompt(self, query, num):
+    def _get_postfix_prompt(self, query: str, num: int) -> List[Dict[str, str]]:
+        """ Get the last instruction prompt for LLM rerankers.
+
+        Args:
+            query (str): The query for which the passages need to be reranked.
+            num (int): The number of passages to be reranked.
+
+        Returns:
+            List[Dict[str, str]]: A list of dictionaries resembling the common LLM message format.
+        """
         example_ordering = "[2] > [1]"
         return {
             "role": "user",
@@ -172,8 +190,25 @@ class Ranker:
 
     @staticmethod
     def _extract_rank(rank_response: str) -> int:
+        """ Extracts the rank from the rank response.
+            Examples:
+                "[1]" => 1
+                "[23]" => 23
+
+        Args:
+            rank_response (str): The rank response extracted from the LLM.
+
+        Returns:
+            int: The rank of the passage.
+
+        Raises:
+            ValueError: If the rank response is not in the expected format.
+        """
         match = re.match(r'\[(\d+)\]', rank_response)
-        return int(match.group(1)) if match else None
+        if match:
+            return int(match.group(1))
+        else:
+            raise ValueError(f"Incorrect LLM response format. Expected rank in square brackets, received: {rank_response}.")
 
     def rerank(self, request: RerankRequest) -> List[Dict[str, Any]]:
         """ Reranks a list of passages based on a query using a pre-trained model.
