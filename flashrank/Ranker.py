@@ -82,7 +82,7 @@ class Ranker:
                 self.llm_model = Llama(
                     model_path=str(self.model_dir / model_file),
                     n_ctx=max_length,
-                    n_threads=8,
+                    n_threads=min(8, os.cpu_count()),
                 )
             except ImportError:
                 raise ImportError(
