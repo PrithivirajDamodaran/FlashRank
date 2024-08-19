@@ -34,7 +34,7 @@ class Ranker:
         tokenizer (Tokenizer): The tokenizer for text processing.
     """
 
-    def __init__(self, model_name: str = default_model, cache_dir: str = default_cache_dir, max_length: int = 512, log_level: str = "INFO"):
+    def __init__(self, model_name: str = default_model, cache_dir: str = default_cache_dir, max_length: int = 512, log_level: str = "INFO", model_file_map: dict = model_file_map):
         """ Initializes the Ranker class with specified model and cache settings.
 
         Args:
