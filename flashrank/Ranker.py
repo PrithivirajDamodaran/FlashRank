@@ -2,7 +2,6 @@ import collections
 import json
 import logging
 import os
-import re
 import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -10,9 +9,6 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 import onnxruntime as ort
-import numpy as np
-import os
-import zipfile
 import requests
 from tokenizers import AddedToken, Tokenizer
 from tqdm import tqdm
@@ -227,8 +223,6 @@ class Ranker:
             "content": f"Search Query: {query}.\nRank the {num} passages above based on their relevance to the search query. All the passages should be included and listed using identifiers, in descending order of relevance. The output format should be [] > [], e.g., {example_ordering}, Only respond with the ranking results, do not say any word or explain.",
         }
 
-
-
     def rerank(self, request: RerankRequest) -> List[Dict[str, Any]]:
         """Reranks a list of passages based on a query using a pre-trained model.
 
@@ -266,7 +260,7 @@ class Ranker:
             results = []
             for rank in raw_ranks["choices"][0]["message"]["content"].split(" > "):
                 results.append(result_map[int(rank[1])])
-            return results    
+            return results
 
         # self.session will be instantiated for ONNX based pairwise CE models
         else:
