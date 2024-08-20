@@ -148,15 +148,9 @@ class Ranker:
         tokens_map = json.load(open(str(self.model_dir / "special_tokens_map.json")))
         tokenizer = Tokenizer.from_file(str(self.model_dir / "tokenizer.json"))
 
-        effective_max_length = min(tokenizer_config["model_max_length"], max_length)
-
-        if effective_max_length < max_length:
-            self.logger.warning(
-                f"Desired max length ({max_length}) exceeds model max length "
-                f"({tokenizer_config['model_max_length']}). Using {effective_max_length}."
-            )
-
-        tokenizer.enable_truncation(max_length=effective_max_length)
+        tokenizer.enable_truncation(
+            max_length=min(tokenizer_config["model_max_length"], max_length)
+        )
         tokenizer.enable_padding(
             pad_id=config["pad_token_id"], pad_token=tokenizer_config["pad_token"]
         )
