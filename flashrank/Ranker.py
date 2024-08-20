@@ -10,6 +10,9 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 import onnxruntime as ort
+import numpy as np
+import os
+import zipfile
 import requests
 from tokenizers import AddedToken, Tokenizer
 from tqdm import tqdm
@@ -224,29 +227,7 @@ class Ranker:
             "content": f"Search Query: {query}.\nRank the {num} passages above based on their relevance to the search query. All the passages should be included and listed using identifiers, in descending order of relevance. The output format should be [] > [], e.g., {example_ordering}, Only respond with the ranking results, do not say any word or explain.",
         }
 
-    @staticmethod
-    def _extract_rank(rank_response: str) -> int:
-        """Extracts the rank from the rank response.
-            Examples:
-                "[1]" => 1
-                "[23]" => 23
 
-        Args:
-            rank_response (str): The rank response extracted from the LLM.
-
-        Returns:
-            int: The rank of the passage.
-
-        Raises:
-            ValueError: If the rank response is not in the expected format.
-        """
-        match = re.match(r"\[(\d+)\]", rank_response)
-        if match:
-            return int(match.group(1))
-        else:
-            raise ValueError(
-                f"Incorrect LLM response format. Expected rank in square brackets, received: {rank_response}."
-            )
 
     def rerank(self, request: RerankRequest) -> List[Dict[str, Any]]:
         """Reranks a list of passages based on a query using a pre-trained model.
@@ -284,8 +265,8 @@ class Ranker:
             raw_ranks = self.llm_model.create_chat_completion(messages)
             results = []
             for rank in raw_ranks["choices"][0]["message"]["content"].split(" > "):
-                results.append(result_map[self._extract_rank(rank)])
-            return results
+                results.append(result_map[int(rank[1])])
+            return results    
 
         # self.session will be instantiated for ONNX based pairwise CE models
         else:
