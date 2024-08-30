@@ -29,8 +29,8 @@ Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing se
 
 Supports:
 
-- Pairwise / Pointwise rerankers. (Cross encoder based)
-- Listwise LLM based rerankers. (LLM based)
+- Pairwise / Pointwise rerankers. (Cross encoder based, i.e. ```Max tokens = 512```)
+- Listwise LLM based rerankers. (LLM based, i.e. ```Max tokens = 8192```)
 (see below for full list of supported models)
 
 # Table of Contents  
