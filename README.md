@@ -81,14 +81,16 @@ Supports:
 pip install flashrank
 ```
 
-## Making ranking faster:
-
-```max_length``` value should be large able to accomodate your longest passage. In other words if your longest passage (100 tokens) + query (16 tokens) pair by token estimate is 116 then say setting ```max_length = 128``` is good enough inclhuding room for reserved tokens like [CLS] and [SEP]. Use [Openai tiktoken](https://github.com/openai/tiktoken) like libraries to estimate token density, if performance per token is critical for you. Non-chalantly giving a longer ```max_length``` like 512 for smaller passage sizes will negatively affect response time.
-
 #### If you need LLM based listwise rerankers
 ```python 
 pip install flashrank[listwise]
 ```
+
+
+## Making ranking faster:
+
+```max_length``` value should be large able to accomodate your longest passage. In other words if your longest passage (100 tokens) + query (16 tokens) pair by token estimate is 116 then say setting ```max_length = 128``` is good enough inclhuding room for reserved tokens like [CLS] and [SEP]. Use [Openai tiktoken](https://github.com/openai/tiktoken) like libraries to estimate token density, if performance per token is critical for you. Non-chalantly giving a longer ```max_length``` like 512 for smaller passage sizes will negatively affect response time.
+
 
 
 ## Getting started:
