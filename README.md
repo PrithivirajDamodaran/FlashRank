@@ -31,16 +31,17 @@ Supports:
 
 - Pairwise / Pointwise rerankers. (Cross encoder based, i.e. ```Max tokens = 512```)
 - Listwise LLM based rerankers. (LLM based, i.e. ```Max tokens = 8192```)
-(see below for full list of supported models)
+- See below for full list of supported models.
 
 # Table of Contents  
 
 1. [Features](#features)  
 2. [Installation](#installation)
-3. [Getting started](#getting-started)
-4. [Deployment patterns](#deployment-patterns)
-5. [How to Cite?](#how-to-cite)
-5. [Papers citing flashrank](#papers-citing-flashrank) 
+3. [Making ranking faster](#making-ranking-faster)
+4. [Getting started](#getting-started)
+5. [Deployment patterns](#deployment-patterns)
+6. [How to Cite?](#how-to-cite)
+7. [Papers citing flashrank](#papers-citing-flashrank) 
 
 
 ## Features
@@ -80,6 +81,10 @@ Supports:
 pip install flashrank
 ```
 
+## Making ranking faster:
+
+```max_length``` value should be large able to accomodate your longest passage. In other words if your longest passage by token estimate is say 128 set ```max_length = 128```. Use ```https://github.com/openai/tiktoken``` like libraries to estimate token density, if performance per token is critical for you. Non-chalantly giving a longer ```max_length``` like 512 for smaller passage sizes will negatively affect response time.
+
 #### If you need LLM based listwise rerankers
 ```python 
 pip install flashrank[listwise]
@@ -91,7 +96,8 @@ pip install flashrank[listwise]
 from flashrank import Ranker, RerankRequest
 
 # Nano (~4MB), blazing fast model & competitive performance (ranking precision).
-ranker = Ranker()
+
+ranker = Ranker(max_length=128)
 
 or 
 
