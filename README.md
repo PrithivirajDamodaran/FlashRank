@@ -73,9 +73,8 @@ Supports:
         * InRanker
     - Why sleeker models are preferred ? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
 
-
 ## Installation:
-#### If you need lightweight pairwise rerankers [default]
+#### If you need lightweight pairwise rerankers [default] 
 ```python 
 pip install flashrank
 ```
