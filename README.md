@@ -1,5 +1,5 @@
 
-<center><img src=./images/logo.png width=50%></center>
+<center><img src=./images/logoo.png width=50%></center>
 
 
 
