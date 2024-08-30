@@ -1,5 +1,6 @@
-
-<center><img src=./images/logoo.png width=50%></center>
+<p align ="center">
+<img width=200 src = "./images/logoo.png">
+</p>
 
 
 
