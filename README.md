@@ -61,8 +61,8 @@ Supports:
     - **Smaller package size** = shorter cold start times, quicker re-deployments for Serverless.
 
 4. 🎯 **Based on SoTA Cross-encoders and other models**:
-    - How good are Zero-shot rerankers - look at the reference section.
-    - Below are the list of models supported as of now.
+    - "How good are Zero-shot rerankers?" - look at the reference section.
+    <!-- - Below are the list of models supported as of now.
         * `ms-marco-TinyBERT-L-2-v2` (default) [Model card](https://huggingface.co/cross-encoder/ms-marco-TinyBERT-L-2)
         * `ms-marco-MiniLM-L-12-v2` [Model card](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L-12-v2)
         * `rank-T5-flan` (Best non cross-encoder reranker) [Model card](https://huggingface.co/bergum/rank-T5-flan)
@@ -70,10 +70,22 @@ Supports:
         * `ce-esci-MiniLM-L12-v2` [FT on Amazon ESCI dataset](https://github.com/amazon-science/esci-data) (This is interesting because most models are FT on MSFT MARCO Bing queries) [Model card](https://huggingface.co/metarank/ce-esci-MiniLM-L12-v2)
         * `rank_zephyr_7b_v1_full` (4-bit-quantised GGUF) [Model card](https://huggingface.co/castorini/rank_zephyr_7b_v1_full) (Offers very competitive performance, with large context window and relatively faster for a 4GB model).
             - **Important note:** Our current integration of `rank_zephyr` supports a max of 20 passages in one pass. The sliding window logic support is yet to be added.
-        * `miniReranker_arabic_v1` [Model card](https://huggingface.co/prithivida/miniReranker_arabic_v1)             
-    - Models in roadmap:
-        * InRanker
-    - Why sleeker models are preferred ? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
+        * `miniReranker_arabic_v1` [Model card](https://huggingface.co/prithivida/miniReranker_arabic_v1)              -->
+
+| Model Name | Description | Size | Notes |
+|------------|-------------|------|-------|
+| `ms-marco-TinyBERT-L-2-v2` | Default model | ~4MB | [Model card](https://huggingface.co/cross-encoder/ms-marco-TinyBERT-L-2) |
+| `ms-marco-MiniLM-L-12-v2` | - | ~34MB | [Model card](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L-12-v2) |
+| `rank-T5-flan` | Best non cross-encoder reranker | ~110MB | [Model card](https://huggingface.co/bergum/rank-T5-flan) |
+| `ms-marco-MultiBERT-L-12` | Multi-lingual, supports 100+ languages | ~150MB | [Supported languages](https://github.com/google-research/bert/blob/master/multilingual.md#list-of-languages) |
+| `ce-esci-MiniLM-L12-v2` | Fine-tuned on Amazon ESCI dataset | - | [Model card](https://huggingface.co/metarank/ce-esci-MiniLM-L12-v2) |
+| `rank_zephyr_7b_v1_full` | 4-bit-quantised GGUF | ~4GB | [Model card](https://huggingface.co/castorini/rank_zephyr_7b_v1_full) |
+| `miniReranker_arabic_v1` | - | - | [Model card](https://huggingface.co/prithivida/miniReranker_arabic_v1) |
+
+
+   - Models in roadmap:
+      * InRanker
+   - Why sleeker models are preferred ? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
 
 ## Installation:
 #### If you need lightweight pairwise rerankers [default] 
