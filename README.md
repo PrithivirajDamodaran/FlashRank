@@ -1,18 +1,30 @@
 
-<img src=./images/logo.png width=100%>
+<center><img src=./images/logo.png width=50%></center>
 
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11093524.svg)](https://doi.org/10.5281/zenodo.11093524)
-
-## [IMPORTANT UPDATE]
-
-~~*A clone library called **SwiftRank is pointing to our model buckets, we are working on a interim solution to avoid this stealing**. Thank you for patience and understanding.*~~
-
-This issue is resolved, the models are in HF now. **please upgrade to continue** pip install -U flashrank. Thank you for patience and understanding
 
 
-# 🏎️ What is it?
+<div align="center">
+
+[![Downloads](https://static.pepy.tech/badge/flashrank)](https://pepy.tech/project/flashrank)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)]()
+[![license]( https://img.shields.io/badge/License-Apache-blue.svg)](https://opensource.org/licenses/Apache2.0)
+[![package]( https://img.shields.io/badge/Package-PYPI-blue.svg)](https://pypi.org/project/FlashRank/)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11093524.svg)](https://doi.org/10.5281/zenodo.11093524)
+
+</div>
+
+
+<div align="center">
+
+  <p align="center">
+    <b>Re-rank your search results with SoTA Pairwise or Listwise rerankers before feeding into your LLMs</b>
+    <br />
+  </p>
+</div>
+
+
 Ultra-lite &amp; Super-fast Python library to add re-ranking to your existing search &amp; retrieval pipelines. It is based on SoTA LLMs and cross-encoders, with gratitude to all the model owners. 
+
 
 Supports:
 
@@ -235,3 +247,11 @@ Detection via Retrieval-Augmented GPT-4 and LLaMA](https://arxiv.org/pdf/2402.06
 
 - [Stance and Hate Event Detection in Tweets Related to
 Climate Activism - Shared Task at CASE 2024](https://aclanthology.org/2024.case-1.33.pdf)
+
+
+## [IMPORTANT UPDATE]
+
+~~*A clone library called **SwiftRank is pointing to our model buckets, we are working on a interim solution to avoid this stealing**. Thank you for patience and understanding.*~~
+
+This issue is resolved, the models are in HF now. **please upgrade to continue** pip install -U flashrank. Thank you for patience and understanding
+
