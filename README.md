@@ -83,7 +83,7 @@ pip install flashrank
 
 ## Making ranking faster:
 
-```max_length``` value should be large able to accomodate your longest passage. In other words if your longest passage by token estimate is say 128 set ```max_length = 128```. Use ```https://github.com/openai/tiktoken``` like libraries to estimate token density, if performance per token is critical for you. Non-chalantly giving a longer ```max_length``` like 512 for smaller passage sizes will negatively affect response time.
+```max_length``` value should be large able to accomodate your longest passage. In other words if your longest passage by token estimate is say 128 set ```max_length = 128```. Use [Openai tiktoken](https://github.com/openai/tiktoken) like libraries to estimate token density, if performance per token is critical for you. Non-chalantly giving a longer ```max_length``` like 512 for smaller passage sizes will negatively affect response time.
 
 #### If you need LLM based listwise rerankers
 ```python 
