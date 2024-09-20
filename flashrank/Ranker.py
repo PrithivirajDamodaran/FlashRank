@@ -210,7 +210,7 @@ class Ranker:
             raw_ranks = self.llm_model.create_chat_completion(messages)
             results = []
             for rank in raw_ranks["choices"][0]["message"]["content"].split(" > "):
-                results.append(result_map[int(rank[1])])
+                results.append(result_map[int(rank.strip("[]"))])
             return results    
 
         # self.session will be instantiated for ONNX based pairwise CE models
