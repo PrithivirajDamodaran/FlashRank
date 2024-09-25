@@ -75,12 +75,12 @@ Supports:
 | Model Name | Description | Size | Notes |
 |------------|-------------|------|-------|
 | `ms-marco-TinyBERT-L-2-v2` | Default model | ~4MB | [Model card](https://huggingface.co/cross-encoder/ms-marco-TinyBERT-L-2) |
-| `ms-marco-MiniLM-L-12-v2` | - | ~34MB | [Model card](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L-12-v2) |
+| `ms-marco-MiniLM-L-12-v2` | `Best Cross-encoder reranker`  | ~34MB | [Model card](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L-12-v2) |
 | `rank-T5-flan` | Best non cross-encoder reranker | ~110MB | [Model card](https://huggingface.co/bergum/rank-T5-flan) |
 | `ms-marco-MultiBERT-L-12` | Multi-lingual, supports 100+ languages | ~150MB | [Supported languages](https://github.com/google-research/bert/blob/master/multilingual.md#list-of-languages) |
 | `ce-esci-MiniLM-L12-v2` | Fine-tuned on Amazon ESCI dataset | - | [Model card](https://huggingface.co/metarank/ce-esci-MiniLM-L12-v2) |
 | `rank_zephyr_7b_v1_full` | 4-bit-quantised GGUF | ~4GB | [Model card](https://huggingface.co/castorini/rank_zephyr_7b_v1_full) |
-| `miniReranker_arabic_v1` | - | - | [Model card](https://huggingface.co/prithivida/miniReranker_arabic_v1) |
+| `miniReranker_arabic_v1` | `Only dedicated Arabic Reranker` | - | [Model card](https://huggingface.co/prithivida/miniReranker_arabic_v1) |
 
 
    - Models in roadmap:
