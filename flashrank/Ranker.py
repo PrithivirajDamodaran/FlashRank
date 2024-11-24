@@ -112,9 +112,12 @@ class Ranker:
         Returns:
             Tokenizer: Configured tokenizer for text processing.
         """
-        config = json.load(open(str(self.model_dir / "config.json")))
-        tokenizer_config = json.load(open(str(self.model_dir / "tokenizer_config.json")))
-        tokens_map = json.load(open(str(self.model_dir / "special_tokens_map.json")))
+        with open(str(self.model_dir / "config.json")) as config_file:
+            config = json.load(config_file)
+        with open(str(self.model_dir / "tokenizer_config.json")) as tokenizer_config_file:
+            tokenizer_config = json.load(tokenizer_config_file)
+        with open(str(self.model_dir / "special_tokens_map.json")) as tokens_map_file:
+            tokens_map = json.load(tokens_map_file)
         tokenizer = Tokenizer.from_file(str(self.model_dir / "tokenizer.json"))
 
         tokenizer.enable_truncation(max_length=min(tokenizer_config["model_max_length"], max_length))
