@@ -185,7 +185,7 @@ class Ranker:
             List[Dict[str, Any]]: The reranked list of passages with added scores.
         """
         query = request.query
-        passages = request.passages
+        passages = [dict(p) for p in request.passages]
 
         # self.llm_model will be instantiated for GGUF based Listwise LLM models
         if self.llm_model is not None:
