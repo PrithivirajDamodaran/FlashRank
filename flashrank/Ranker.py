@@ -7,10 +7,19 @@ import os
 import zipfile
 import requests
 from tqdm import tqdm
-from flashrank.Config import default_model, default_cache_dir, model_url, model_file_map, listwise_rankers
+from flashrank.Config import default_model, default_cache_dir, model_url, model_file_map, listwise_rankers, hf_model_url, required_files
 import collections
 from typing import Optional, List, Dict, Any
 import logging
+
+def download_file(local_file, download_url):
+    with requests.get(download_url, stream=True) as r:
+        r.raise_for_status()
+        total_size = int(r.headers.get('content-length', 0))
+        with open(local_file, 'wb') as f, tqdm(desc=local_file.name, total=total_size, unit='iB', unit_scale=True, unit_divisor=1024) as bar:
+            for chunk in r.iter_content(chunk_size=8192):
+                size = f.write(chunk)
+                bar.update(size)
 
 class RerankRequest:
     """ Represents a reranking request with a query and a list of passages. 
@@ -49,8 +58,11 @@ class Ranker:
         self.logger = logging.getLogger(__name__)
 
         self.cache_dir: Path = Path(cache_dir)
-        self.model_dir: Path = self.cache_dir / model_name
-        model_file = model_file_map[model_name]
+        self.model_dir: Path = self.cache_dir / model_name.replace("/", "-")
+        if model_name in model_file_map:
+            model_file = model_file_map[model_name]
+        else:
+            model_file = f"{model_name.split('/')[-1]}.onnx"
         self.model_path = self.model_dir / model_file
         self._prepare_model_dir(model_name)
 
@@ -81,7 +93,11 @@ class Ranker:
         
         if not self.model_path.exists():
             self.logger.info(f"Downloading {model_name}...")
-            self._download_model_files(model_name)
+            if model_name in model_file_map:
+                self._download_model_files(model_name)
+            else:
+                self.logger.info(f"Model {model_name} not found in model map, downloading from custom URL...")
+                self._download_hf_model_files(model_name)
 
     def _download_model_files(self, model_name: str):
         """ Downloads and extracts the model files from a specified URL.
@@ -92,17 +108,39 @@ class Ranker:
         local_zip_file = self.cache_dir / f"{model_name}.zip"
         formatted_model_url = model_url.format(model_name)
         
-        with requests.get(formatted_model_url, stream=True) as r:
-            r.raise_for_status()
-            total_size = int(r.headers.get('content-length', 0))
-            with open(local_zip_file, 'wb') as f, tqdm(desc=local_zip_file.name, total=total_size, unit='iB', unit_scale=True, unit_divisor=1024) as bar:
-                for chunk in r.iter_content(chunk_size=8192):
-                    size = f.write(chunk)
-                    bar.update(size)
+        download_file(local_zip_file, formatted_model_url)
 
         with zipfile.ZipFile(local_zip_file, 'r') as zip_ref:
             zip_ref.extractall(self.cache_dir)
         os.remove(local_zip_file)
+
+    def _download_hf_model_files(self, model_name: str):
+        """ Downloads model files from Hugging Face repository.
+
+        Args:
+            model_name (str): The name of the model to download.
+        """
+        has_onnx = False
+        if not self.model_dir.exists():
+            self.model_dir.mkdir(parents=True, exist_ok=True)
+        local_model_path = self.model_dir / f"{model_name.split('/')[-1]}.onnx"
+        for onnx in ["onnx/model_quantized.onnx", "onnx/model_uint8.onnx", "onnx/model_O4.onnx","onnx/model_fp16.onnx", "onnx/model.onnx"]:
+            formatted_model_url = hf_model_url.format(model_name, onnx)
+            try:
+                download_file(local_model_path, formatted_model_url)
+                has_onnx = True
+                break
+            except requests.exceptions.HTTPError as e:
+                self.logger.warning(f"Could not download {onnx} for model {model_name}. Error: {e}")
+                continue
+        if not has_onnx:
+            raise FileNotFoundError(f"ONNX model file not found for model {model_name} in the Hugging Face repository.")
+        
+        for req_file in required_files:
+            formatted_artifacts_url = hf_model_url.format(model_name, req_file)
+            local_file_path = self.model_dir / req_file
+            download_file(local_file_path, formatted_artifacts_url)
+        
 
     def _get_tokenizer(self, max_length: int = 512) -> Tokenizer:
         """ Initializes and configures the tokenizer with padding and truncation.
@@ -227,7 +265,7 @@ class Ranker:
             token_type_ids = np.array([e.type_ids for e in input_text])
             attention_mask = np.array([e.attention_mask for e in input_text])
 
-            use_token_type_ids = token_type_ids is not None and not np.all(token_type_ids == 0)
+            use_token_type_ids = token_type_ids is not None and not np.all(token_type_ids == 0) and "token_type_ids" in {inp.name for inp in self.session.get_inputs()}
 
             onnx_input = {"input_ids": input_ids.astype(np.int64), "attention_mask": attention_mask.astype(np.int64)}
             if use_token_type_ids:
