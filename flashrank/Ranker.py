@@ -220,6 +220,9 @@ class Ranker:
         # self.session will be instantiated for ONNX based pairwise CE models
         else:
             self.logger.debug("Running pairwise ranking..")
+            if not passages:
+                return passages
+
             query_passage_pairs = [[query, passage["text"]] for passage in passages]
 
             input_text = self.tokenizer.encode_batch(query_passage_pairs)
