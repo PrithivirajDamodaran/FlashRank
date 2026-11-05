@@ -240,7 +240,8 @@ class Ranker:
             if logits.shape[1] == 1:
                 scores = 1 / (1 + np.exp(-logits.flatten()))
             else:
-                exp_logits = np.exp(logits)
+                # Softmax is unchanged by row shifts; center logits to avoid overflow.
+                exp_logits = np.exp(logits - np.max(logits, axis=1, keepdims=True))
                 scores = exp_logits[:, 1] / np.sum(exp_logits, axis=1)
 
             for score, passage in zip(scores, passages):
