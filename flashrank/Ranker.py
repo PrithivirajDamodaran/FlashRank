@@ -265,7 +265,7 @@ class Ranker:
             token_type_ids = np.array([e.type_ids for e in input_text])
             attention_mask = np.array([e.attention_mask for e in input_text])
 
-            use_token_type_ids = token_type_ids is not None and not np.all(token_type_ids == 0) and "token_type_ids" in {inp.name for inp in self.session.get_inputs()}
+            use_token_type_ids = "token_type_ids" in {inp.name for inp in self.session.get_inputs()}
 
             onnx_input = {"input_ids": input_ids.astype(np.int64), "attention_mask": attention_mask.astype(np.int64)}
             if use_token_type_ids:
