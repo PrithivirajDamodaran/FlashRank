@@ -8,6 +8,24 @@ model_url = urljoin(hf_endpoint, 'prithivida/flashrank/resolve/main/{}.zip')
 hf_model_url = urljoin(hf_endpoint, '{}/resolve/main/{}')
 listwise_rankers = {'rank_zephyr_7b_v1_full'}
 required_files = ['config.json', 'tokenizer.json', 'tokenizer_config.json', 'special_tokens_map.json']
+# ONNX variants to probe for on the Hub, in order of preference. Two naming
+# conventions appear in the wild: quantization variants from transformers.js /
+# optimum (`model_quantized`, `model_q4`, ...) and Optimum optimization levels
+# (`model_O1` through `model_O4`). `model.onnx` is the catch-all fallback.
+onnx_file_candidates = [
+    "onnx/model_quantized.onnx",
+    "onnx/model_uint8.onnx",
+    "onnx/model_int8.onnx",
+    "onnx/model_q4.onnx",
+    "onnx/model_q4f16.onnx",
+    "onnx/model_bnb4.onnx",
+    "onnx/model_O4.onnx",
+    "onnx/model_O3.onnx",
+    "onnx/model_O2.onnx",
+    "onnx/model_O1.onnx",
+    "onnx/model_fp16.onnx",
+    "onnx/model.onnx",
+]
 default_cache_dir = "/tmp"
 default_model = "ms-marco-TinyBERT-L-2-v2"
 model_file_map = {
