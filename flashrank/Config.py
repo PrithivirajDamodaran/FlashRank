@@ -7,24 +7,31 @@ hf_endpoint = os.environ.get('HF_ENDPOINT', default='https://huggingface.co')
 model_url = urljoin(hf_endpoint, 'prithivida/flashrank/resolve/main/{}.zip')
 hf_model_url = urljoin(hf_endpoint, '{}/resolve/main/{}')
 listwise_rankers = {'rank_zephyr_7b_v1_full'}
-required_files = ['config.json', 'tokenizer.json', 'tokenizer_config.json', 'special_tokens_map.json']
+# Files a Hub repo must provide for a custom ONNX model to load.
+required_files = ['config.json', 'tokenizer.json', 'tokenizer_config.json']
+# Files that are useful when present but are legitimately absent from many repos.
+optional_files = ['special_tokens_map.json']
 # ONNX variants to probe for on the Hub, in order of preference. Two naming
 # conventions appear in the wild: quantization variants from transformers.js /
 # optimum (`model_quantized`, `model_q4`, ...) and Optimum optimization levels
-# (`model_O1` through `model_O4`). `model.onnx` is the catch-all fallback.
+# (`model_O1` through `model_O4`).
+#
+# The fp16 exports are tried last: several transformers.js fp16 graphs fail to
+# initialize in ONNX Runtime with a SimplifiedLayerNormFusion error, so a
+# plain-fp32 `model.onnx` is a safer fallback when a repo ships both.
 onnx_file_candidates = [
     "onnx/model_quantized.onnx",
     "onnx/model_uint8.onnx",
     "onnx/model_int8.onnx",
     "onnx/model_q4.onnx",
-    "onnx/model_q4f16.onnx",
     "onnx/model_bnb4.onnx",
     "onnx/model_O4.onnx",
     "onnx/model_O3.onnx",
     "onnx/model_O2.onnx",
     "onnx/model_O1.onnx",
-    "onnx/model_fp16.onnx",
     "onnx/model.onnx",
+    "onnx/model_fp16.onnx",
+    "onnx/model_q4f16.onnx",
 ]
 default_cache_dir = "/tmp"
 default_model = "ms-marco-TinyBERT-L-2-v2"

@@ -83,7 +83,7 @@ Supports:
 | `rank_zephyr_7b_v1_full` | 4-bit-quantised GGUF | ~4GB | [Model card](https://huggingface.co/castorini/rank_zephyr_7b_v1_full) |
 | `miniReranker_arabic_v1` | `Only dedicated Arabic Reranker` | - | [Model card](https://huggingface.co/prithivida/miniReranker_arabic_v1) |
 
-   - HuggingFace models - models that already have onnx generate will also work. Please take into account that all models that are saved as onnx are optimized for size and speed. For instance:
+   - HuggingFace models - most ONNX exports published on the Hub work without a code change. The repo must provide an `onnx/model*.onnx` file plus `config.json`, `tokenizer.json` and `tokenizer_config.json`; `special_tokens_map.json` is used when present. These models are **not curated or size-checked** by FlashRank - pick them with the same care you would give any third-party model, and note the download size is logged when it is fetched. For instance:
       * mixedbread-ai/mxbai-rerank-xsmall-v1
       * jinaai/jina-reranker-v1-tiny-en
    - Models in roadmap:
