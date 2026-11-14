@@ -5,8 +5,9 @@ from urllib.parse import urljoin
 
 hf_endpoint = os.environ.get('HF_ENDPOINT', default='https://huggingface.co')
 model_url = urljoin(hf_endpoint, 'prithivida/flashrank/resolve/main/{}.zip')
+hf_model_url = urljoin(hf_endpoint, '{}/resolve/main/{}')
 listwise_rankers = {'rank_zephyr_7b_v1_full'}
-
+required_files = ['config.json', 'tokenizer.json', 'tokenizer_config.json', 'special_tokens_map.json']
 default_cache_dir = "/tmp"
 default_model = "ms-marco-TinyBERT-L-2-v2"
 model_file_map = {

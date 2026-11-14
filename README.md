@@ -83,7 +83,9 @@ Supports:
 | `rank_zephyr_7b_v1_full` | 4-bit-quantised GGUF | ~4GB | [Model card](https://huggingface.co/castorini/rank_zephyr_7b_v1_full) |
 | `miniReranker_arabic_v1` | `Only dedicated Arabic Reranker` | - | [Model card](https://huggingface.co/prithivida/miniReranker_arabic_v1) |
 
-
+   - HuggingFace models - models that already have onnx generate will also work. Please take into account that all models that are saved as onnx are optimized for size and speed. For instance:
+      * mixedbread-ai/mxbai-rerank-xsmall-v1
+      * jinaai/jina-reranker-v1-tiny-en
    - Models in roadmap:
       * InRanker
    - Why sleeker models are preferred ? Reranking is the final leg of larger retrieval pipelines, idea is to avoid any extra overhead especially for user-facing scenarios. To that end models with really small footprint that doesn't need any specialised hardware and yet offer competitive performance are chosen. Feel free to raise issues to add support for a new models as you see fit.
@@ -132,6 +134,13 @@ ranker = Ranker(model_name="ms-marco-MultiBERT-L-12", cache_dir="/opt")
 or 
 
 ranker = Ranker(model_name="rank_zephyr_7b_v1_full", max_length=1024) # adjust max_length based on your passage length
+
+or
+
+# Medium (~90MB), fast modern model with competitive performance on diverse datasets
+ranker = Ranker(model_name="mixedbread-ai/mxbai-rerank-xsmall-v1", cache_dir="/opt")
+
+
 ```
 
 ```python
