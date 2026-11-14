@@ -7,10 +7,59 @@ import os
 import zipfile
 import requests
 from tqdm import tqdm
-from flashrank.Config import default_model, default_cache_dir, model_url, model_file_map, listwise_rankers
+from flashrank.Config import (
+    default_model,
+    default_cache_dir,
+    model_url,
+    model_file_map,
+    listwise_rankers,
+    hf_model_url,
+    required_files,
+    optional_files,
+    onnx_file_candidates,
+)
 import collections
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Set
 import logging
+from functools import cached_property
+
+logger = logging.getLogger(__name__)
+
+def _format_size(num_bytes: int) -> str:
+    """ Formats a byte count for log output. """
+    if num_bytes >= 1024 * 1024:
+        return f"{num_bytes / (1024 * 1024):.1f} MB"
+    if num_bytes >= 1024:
+        return f"{num_bytes / 1024:.1f} KB"
+    return f"{num_bytes} B"
+
+def download_file(local_file: Path, download_url: str) -> None:
+    """ Downloads a file to a local path, writing it atomically.
+
+    The payload is streamed to a sibling ``.part`` file and only moved into
+    place once the transfer completes. An interrupted download therefore
+    leaves no truncated file that would look complete on the next run.
+
+    Args:
+        local_file (Path): Destination path for the downloaded file.
+        download_url (str): URL to download from.
+    """
+    partial_file = local_file.with_name(f"{local_file.name}.{os.getpid()}.part")
+    try:
+        with requests.get(download_url, stream=True) as r:
+            r.raise_for_status()
+            total_size = int(r.headers.get('content-length', 0))
+            if total_size:
+                logger.info(f"Downloading {download_url} ({_format_size(total_size)})")
+            with open(partial_file, 'wb') as f, tqdm(desc=local_file.name, total=total_size, unit='iB', unit_scale=True, unit_divisor=1024) as bar:
+                for chunk in r.iter_content(chunk_size=8192):
+                    size = f.write(chunk)
+                    bar.update(size)
+        os.replace(partial_file, local_file)
+    except BaseException:
+        if partial_file.exists():
+            partial_file.unlink()
+        raise
 
 class RerankRequest:
     """ Represents a reranking request with a query and a list of passages. 
@@ -49,8 +98,11 @@ class Ranker:
         self.logger = logging.getLogger(__name__)
 
         self.cache_dir: Path = Path(cache_dir)
-        self.model_dir: Path = self.cache_dir / model_name
-        model_file = model_file_map[model_name]
+        self.model_dir: Path = self.cache_dir / model_name.replace("/", "-")
+        if model_name in model_file_map:
+            model_file = model_file_map[model_name]
+        else:
+            model_file = f"{model_name.split('/')[-1]}.onnx"
         self.model_path = self.model_dir / model_file
         self._prepare_model_dir(model_name)
 
@@ -69,6 +121,28 @@ class Ranker:
             self.session = ort.InferenceSession(str(self.model_path))
             self.tokenizer: Tokenizer = self._get_tokenizer(max_length)
 
+    @cached_property
+    def input_names(self) -> Set[str]:
+        """ Names of the inputs the loaded ONNX graph declares.
+
+        Computed once, on first use, so it is not rebuilt on every rerank call.
+        """
+        return {inp.name for inp in self.session.get_inputs()}
+
+    def _is_model_ready(self, model_name: str) -> bool:
+        """ Returns True when every file the ranker needs is already cached.
+
+        Curated models are complete once their model file is present. Custom Hub
+        models also need their tokenizer files: the model file is downloaded
+        first, so a later failure would otherwise leave a cache directory that
+        looks ready but cannot load, and it would never be retried.
+        """
+        if not self.model_path.exists():
+            return False
+        if model_name in model_file_map:
+            return True
+        return all((self.model_dir / name).exists() for name in required_files)
+
     def _prepare_model_dir(self, model_name: str):
         """ Ensures the model directory is prepared by downloading and extracting the model if not present.
 
@@ -79,9 +153,13 @@ class Ranker:
             self.logger.debug(f"Cache directory {self.cache_dir} not found. Creating it..")
             self.cache_dir.mkdir(parents=True, exist_ok=True)
         
-        if not self.model_path.exists():
+        if not self._is_model_ready(model_name):
             self.logger.info(f"Downloading {model_name}...")
-            self._download_model_files(model_name)
+            if model_name in model_file_map:
+                self._download_model_files(model_name)
+            else:
+                self.logger.info(f"Model {model_name} not found in model map, downloading from custom URL...")
+                self._download_hf_model_files(model_name)
 
     def _download_model_files(self, model_name: str):
         """ Downloads and extracts the model files from a specified URL.
@@ -92,17 +170,64 @@ class Ranker:
         local_zip_file = self.cache_dir / f"{model_name}.zip"
         formatted_model_url = model_url.format(model_name)
         
-        with requests.get(formatted_model_url, stream=True) as r:
-            r.raise_for_status()
-            total_size = int(r.headers.get('content-length', 0))
-            with open(local_zip_file, 'wb') as f, tqdm(desc=local_zip_file.name, total=total_size, unit='iB', unit_scale=True, unit_divisor=1024) as bar:
-                for chunk in r.iter_content(chunk_size=8192):
-                    size = f.write(chunk)
-                    bar.update(size)
+        download_file(local_zip_file, formatted_model_url)
 
         with zipfile.ZipFile(local_zip_file, 'r') as zip_ref:
             zip_ref.extractall(self.cache_dir)
         os.remove(local_zip_file)
+
+    def _download_onnx_variant(self, model_name: str, local_model_path: Path):
+        """ Downloads the first ONNX variant of a Hub model that exists.
+
+        Args:
+            model_name (str): The name of the model on the Hub.
+            local_model_path (Path): Where to store the downloaded ONNX file.
+        """
+        for onnx in onnx_file_candidates:
+            formatted_model_url = hf_model_url.format(model_name, onnx)
+            try:
+                download_file(local_model_path, formatted_model_url)
+                return
+            except requests.exceptions.HTTPError as e:
+                status = getattr(e.response, "status_code", None)
+                if status in (401, 403):
+                    raise PermissionError(
+                        f"Model {model_name} is gated or private on the Hugging Face Hub "
+                        f"(HTTP {status}). Accept its terms on the Hub before using it."
+                    ) from e
+                self.logger.debug(f"Could not download {onnx} for model {model_name}: {e}")
+        raise FileNotFoundError(
+            f"No ONNX model found for {model_name}. Looked for: {', '.join(onnx_file_candidates)}."
+        )
+
+    def _download_hf_model_files(self, model_name: str):
+        """ Downloads model files from Hugging Face repository.
+
+        Files already present are left alone, so a download that failed partway
+        can be resumed without re-fetching the model.
+
+        Args:
+            model_name (str): The name of the model to download.
+        """
+        if not self.model_dir.exists():
+            self.model_dir.mkdir(parents=True, exist_ok=True)
+        local_model_path = self.model_dir / f"{model_name.split('/')[-1]}.onnx"
+        if not local_model_path.exists():
+            self._download_onnx_variant(model_name, local_model_path)
+
+        for req_file in required_files:
+            local_file_path = self.model_dir / req_file
+            if not local_file_path.exists():
+                download_file(local_file_path, hf_model_url.format(model_name, req_file))
+
+        for opt_file in optional_files:
+            local_file_path = self.model_dir / opt_file
+            if local_file_path.exists():
+                continue
+            try:
+                download_file(local_file_path, hf_model_url.format(model_name, opt_file))
+            except requests.exceptions.HTTPError as e:
+                self.logger.debug(f"Optional file {opt_file} not available for {model_name}: {e}")
 
     def _get_tokenizer(self, max_length: int = 512) -> Tokenizer:
         """ Initializes and configures the tokenizer with padding and truncation.
@@ -117,12 +242,25 @@ class Ranker:
             config = json.load(config_file)
         with open(str(self.model_dir / "tokenizer_config.json")) as tokenizer_config_file:
             tokenizer_config = json.load(tokenizer_config_file)
-        with open(str(self.model_dir / "special_tokens_map.json")) as tokens_map_file:
-            tokens_map = json.load(tokens_map_file)
+        tokens_map = {}
+        tokens_map_path = self.model_dir / "special_tokens_map.json"
+        if tokens_map_path.exists():
+            with open(str(tokens_map_path)) as tokens_map_file:
+                tokens_map = json.load(tokens_map_file)
         tokenizer = Tokenizer.from_file(str(self.model_dir / "tokenizer.json"))
 
-        tokenizer.enable_truncation(max_length=min(tokenizer_config["model_max_length"], max_length))
-        tokenizer.enable_padding(pad_id=config["pad_token_id"], pad_token=tokenizer_config["pad_token"])
+        # Not every Hub repo populates these, so fall back rather than raising.
+        try:
+            model_max_length = int(tokenizer_config.get("model_max_length") or max_length)
+        except (TypeError, ValueError):
+            model_max_length = max_length
+        tokenizer.enable_truncation(max_length=min(model_max_length, max_length))
+        pad_token = tokenizer_config.get("pad_token")
+        pad_id = config.get("pad_token_id")
+        if pad_token is not None:
+            tokenizer.enable_padding(pad_id=pad_id or 0, pad_token=pad_token)
+        else:
+            tokenizer.enable_padding(pad_id=pad_id or 0)
 
         for token in tokens_map.values():
             if isinstance(token, str):
@@ -227,7 +365,7 @@ class Ranker:
             token_type_ids = np.array([e.type_ids for e in input_text])
             attention_mask = np.array([e.attention_mask for e in input_text])
 
-            use_token_type_ids = token_type_ids is not None and not np.all(token_type_ids == 0)
+            use_token_type_ids = "token_type_ids" in self.input_names
 
             onnx_input = {"input_ids": input_ids.astype(np.int64), "attention_mask": attention_mask.astype(np.int64)}
             if use_token_type_ids:
